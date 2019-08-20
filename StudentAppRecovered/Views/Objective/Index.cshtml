@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container" style="margin-top:40px">
+    <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+        <div class="card-content">
+            <div class="card-title orange darken-3">
+                <div class="header2 white-text" style="margin:0 10px"><b>Career Objective</b></div>
+            </div>
+            <div class="row">
+                <form id="ObjectiveForm">
+                    <div class="input-field col m8">
+                        <span class="fa fa-question-circle orange-text text-darken-3 prefix" />
+                        <textarea id="Objective" name="txtObjective" class="materialize-textarea"></textarea>
+                        <label for="txtObjective">Career objective *</label>
+                    </div>
+
+                    <div class="col m4">
+                        <div class="input-field">
+                            <input class="with-gap" type="radio" id="Article" value="Article" name="SeekType" />
+                            <label for="Article">I am applying for Articleship</label>
+                        </div>
+                        <div class="input-field">
+                            <input class="with-gap" type="radio" id="Job" value="Job" name="SeekType" />
+                            <label for="Job">I am applying for Job</label>
+                        </div>
+                        <div class="input-field">
+                            <input class="with-gap" type="radio" id="PartnerProfile" value="PartnerProfile" name="SeekType" />
+                            <label for="PartnerProfile">I am uploding partner's profile</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row">
+                <div class="col m4">
+                    <div id="ExperienceCheck1" />
+                    <div id="CurrentJobDetail1" />
+                </div>
+                <div class="col m8" style="border-left:1px solid #e65100">
+                    <div id="CurrentJobDetail2" />
+                    <div id="ExperienceCheck2" />                  
+                </div>
+                <div class="col m12">
+                    <div id="MembersDetail"/>
+                </div>
+            </div>
+
+                       
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <button id="btnNexttoObjective" 
+                            class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                            data-position="left"
+                            data-delay="50"
+                            data-tooltip="Next">
+                        <span class="fa fa-arrow-circle-right"></span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

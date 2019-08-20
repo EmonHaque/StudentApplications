@@ -1,0 +1,105 @@
+﻿@using StudentAppRecovered.Helper
+@{ 
+    var id = Lists4CV.Education.Where(x => x.Level == "Master").Select(x => x.Id).First();
+    var titles = Lists4CV.EducationTitle.Where(x => x.Id == id);
+    var universities = Lists4CV.BoardUniversity.Where(x => x.Level == "University");
+}
+<form id="MasterForm" class="wow bounceInDown">
+    <div class="card">
+        <div class="card-title orange lighten-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>Master</b></div>
+        </div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s6">
+                    <span class="fa fa-flag orange-text text-darken-3 prefix" />
+                    <select id="MasterType" name="MasterddlType">
+                        <option value="" disabled selected>Choose</option>
+                        <option>Regular</option>
+                        <option>Professional</option>
+                        <option>Private</option>
+                    </select>
+                    <label for="ddlType">Type*</label>
+                </div>
+                <div class="input-field col s6">
+                    <span class="fa fa-graduation-cap orange-text text-darken-3 prefix" />
+                    <select id="MasterTitle" name="MasterddlTitle">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in titles)
+                    {
+                            <option value="@item.TitleId">@item.Title</option>
+                    }
+                    </select>
+                    <label for="ddlTitle">Title*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s10">
+                    <span class="fa fa-industry orange-text text-darken-3 prefix" />
+                    <input id="MasterMajor" name="txtMajor" type="text">
+                    <label for="txtMajor">Major</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s5">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input id="MasterYearOfPass" name="txtYearOfPass" type="text">
+                    <label for="txtYearOfPass">Year of pass*</label>
+                </div>
+                <div class="input-field col s5">
+                    <span class="fa fa-star orange-text text-darken-3 prefix" />
+                    <input id="MasterCGPA" name="txtCGPA" type="text">
+                    <label for="txtCGPA">CGPA/Class*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m10">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <input id="MasterInstitute" name="txtInstitute" type="text">
+                    <label for="txtInstitute">Institute*</label>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="input-field col m10">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <select id="MasterUniversity" name="ddlMasterUni">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in universities)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <label for="ddlMasterUni">University*</label>
+                </div>
+                <div class="col m2">
+                    <a id="AddMasterUniversity"
+                       class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                       style="margin-top:15px"
+                       data-position="left"
+                       data-delay="50"
+                       data-tooltip="Not in List?">
+                        <span class="fa fa-plus-circle"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="MasterUniAdd">
+    <div class="modal" id="UniModal">
+        <div class="modal-content">
+
+            <div class="input-field">
+                <label for="txtMasterUniversityName">Name of your University*</label>
+                <input id="MasterUniversityName" name="txtMasterUniversityName" type="text">
+            </div>
+            <div id="uniaddmsg" />
+        </div>
+        <div class="modal-footer">
+            <a id="CloseMasterUniAdd" class="waves-effect waves-green btn btn-flat">Cancel</a>
+            <a id="AddMasterUniToList" class="waves-effect waves-green btn btn-flat">Add to list</a>
+        </div>
+    </div>
+</form>

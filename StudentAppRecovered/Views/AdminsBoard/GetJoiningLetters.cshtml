@@ -1,0 +1,59 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var students = WhoIsWhereLists.Students4WhoIsWhere;
+    var joiningletters = Employee.JoiningLetters();
+    TempData["AllStudents"] = students.ToList();
+    TempData["AllLetters"] = joiningletters.ToList();
+    int letterCount = joiningletters.Count();
+    if (letterCount > 10) { joiningletters = joiningletters.Take(10).ToList(); }
+    TempData.Keep();
+
+    if (joiningletters.Count() > 0)
+    {
+        <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <div><b>Joining Letter</b><span class="new badge orange darken-4" style="margin-right:5px">@letterCount</span></div>
+                    <div class="divider orange darken-4" style="margin-bottom:5px" />
+                    <div class="row" id="letterDiv">
+  
+                            @foreach (var student in joiningletters)
+                            {
+                                var studName = students.Where(x => x.Id == student.Id).Select(x => x.Name).First();
+                                var photopath = "/Photo/" + student.Id + " " + studName + ".jpg";
+                                <div class="col m6">
+                                    <div class="row" style="margin-bottom:2px">
+                                        <div class="col m2">
+                                            <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                        </div>
+                                        <div class="col m10">
+                                            <a name="SeeJoiningLetter" data-val="@student.Id"><b><u>@studName</u></b></a>
+                                            <div>Joined on @student.Date.ToLongDateString()</div>
+                                            <div>@student.AppSubject</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        @if (letterCount > 10)
+                        {
+                            <div class="row">
+                                <button name="nextJoining"
+                                        class="btn-floating btn-small orange darken-1 right tooltipped"
+                                        data-position="left"
+                                        data-delay="50"
+                                        data-val="student"
+                                        data-info="applicant"
+                                        data-tooltip="next">
+                                    <span class="fa fa-long-arrow-right"></span>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    }
+
+

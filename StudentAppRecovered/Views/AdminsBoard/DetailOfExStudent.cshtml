@@ -1,0 +1,188 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["StudentId"];
+
+    var student = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == stud.id).First();
+    var studentCV = WhoIsWhereLists.GetStudentCV(stud.id);
+    var applications = Employee.AllApplications(stud.id);
+    var supHistory = Employee.SupervisingHistory(stud.id).OrderBy(x => x.From).ToList();
+    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+    var currentStatus = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+
+    var managerId = Lists4CV.Status.Where(x => x.Name == "Manager").First().Id.ToString();
+    var ccId = Lists4CV.Status.Where(x => x.Name == "Course Completed").First().Id.ToString();
+    var articledId = Lists4CV.Status.Where(x => x.Name == "Articled").First().Id.ToString();
+    var apprenticeId = Lists4CV.Status.Where(x => x.Name == "Apprentice").First().Id.ToString();
+    var appliedId = Lists4CV.Status.Where(x => x.Name == "Applied for Registration").First().Id.ToString();
+
+    var appliedFor = Lists4CV.Status.Where(x => x.Id == applications.FirstApplication.StatusId).First().Name;
+}
+
+<div class="row" style="width:100%">
+    <div class="col m6">
+        <div id="AllAppDiv">
+
+        </div>
+        <div id="GenInfo">
+            <div class="card">
+                <div class="row">
+                    <div class="col m4">
+                        <img src="@photopath" style="height:150px; width:150px; margin-top:5px" class="responsive-img circle" />
+                    </div>
+                    <div class="col m8">
+                        <h5>@student.Name</h5>
+                        <div>Status: @currentStatus</div>
+                        <div><span class="fa fa-phone orange-text text-darken-4" />&nbsp;&nbsp;@studentCV.ContactNo</div>
+                        @if (studentCV.Email != null)
+                        {
+                            <div><span class="fa fa-envelope orange-text text-darken-4" />&nbsp;&nbsp;@studentCV.Email</div>
+                        }
+                        <div class="divider orange darken-4" />
+                        @{
+                        var lines = studentCV.PresentAddress.Split(new char[] { '\n' });
+                        var count = 0;
+                        foreach (var line in lines)
+                        {
+                            if (count == 0)
+                            {
+                                    <div>@line</div>
+                            }
+                            else
+                            {
+                                if (line != string.Empty)
+                                {
+                                        <div>@line</div>
+                                }
+                                else
+                                { <br />}
+                            }
+                            count++;
+                        }
+                        }
+                        <button name="SeeStudentCV"
+                                data-val="@student.Id"
+                                class="btn-floating btn-large waves-effect orange darken-3 right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="View CV">
+                            <span class="fa fa-binoculars"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="container" style="width:96%">
+                        <ul class="collapsible" data-collapsible="accordion">
+                            <li>
+                                <div class="collapsible-header orange darken-3 white-text"><b>Job History</b></div>
+                                <div class="collapsible-body">
+                                    <div class="collection">
+                                        <div class="collection-item">
+                                            Applied as an @appliedFor on @applications.FirstApplication.Date.ToShortDateString()
+                                        </div>
+
+                                        @for (int i = 0; i < supHistory.Count(); i++)
+                                        {
+                                            var partnerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].PartnerId).First().Name;
+                                            var jobStatus = Lists4CV.Status.Where(x => x.Id == supHistory[i].StatusId).First().Name;
+                                            if (i == 0)
+                                            {
+                                                if (supHistory.Count() == 1)
+                                                {
+                                                    if (supHistory[i].ManagerId == 0)
+                                                    {
+                                                        <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[i].From.ToShortDateString() and left on @supHistory[i].To.ToShortDateString() </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                                        <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[i].From.ToShortDateString(), was supervised by @managerName and left on @supHistory[i].To.ToShortDateString()</div>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (supHistory[i].ManagerId == 0)
+                                                    {
+                                                        <div class="collection-item">Joined as @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString()</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                                        <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[i].From.ToShortDateString() and was supervised by @managerName till @supHistory[i].To.ToShortDateString()</div>
+                                                    }
+                                                }
+
+                                            }
+                                            else if (i == supHistory.Count() - 1)
+                                            {
+                                                if (supHistory[i].ManagerId == 0)
+                                                {
+                                                    <div class="collection-item">Lastly @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString()</div>
+                                                }
+                                                else
+                                                {
+                                                    var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                                    <div class="collection-item">Lastly @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() and is being supervised by @managerName to @supHistory[i].To.ToShortDateString()</div>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (supHistory[i].ManagerId == 0)
+                                                {
+                                                    <div class="collection-item">@jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString()</div>
+                                                }
+                                                else
+                                                {
+                                                    var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                                    <div class="collection-item">@jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString() and was supervised by @managerName</div>
+                                                }
+                                            }
+                                        }
+
+
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col m6">
+        <div class="card">
+            <div class="card-content">
+                <table class="customtable">
+                    <thead>
+                        <tr>
+                            <th class="white-text">Subject of Application</th>
+                            <th class="white-text">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="FirstApp" data-val="@student.Id">
+                            <td><a name="AllApps2" data-val="First">@applications.FirstApplication.AppSubject</a></td>
+                            <td>@applications.FirstApplication.Date.ToShortDateString()</td>
+                        </tr>
+                        <tr>
+                            @if (applications.Joining != null)
+                            {
+                                <td><a name="AllApps2" data-val="Joining">@applications.Joining.AppSubject</a></td>
+                                <td>@applications.Joining.Date.ToShortDateString()</td>
+                            }
+                        </tr>
+                        @foreach (var item in applications.Applications)
+                        {
+                            <tr>
+                                <td><a name="AllApps2" data-val="@item.Sl">@WhoIsWhereLists.Applications.Where(x => x.Id == item.AppTypeId).Select(x => x.Type).First()</a></td>
+                                <td>@item.Date.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>  
+</div>

@@ -1,0 +1,59 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var stud = (StudentId)TempData["Id"];
+    var supHistory = Employee.SupervisingHistory(stud.id); 
+    var studId = supHistory.First().Id;
+    var student = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == studId).First();
+}
+
+<div class="card">
+    <div class="card-content">
+        <div class="row" style="margin-bottom:0">
+            <button id="ClosePromoteDiv"
+                    class="btn-floating orange darken-4 right tooltipped"
+                    data-position="left"
+                    data-delay="50"
+                    data-tooltip="Click to Close">
+                <span class="fa fa-remove"></span>
+            </button>
+        </div>
+        <div class="row">
+            <div><b>Enter Registration No.</b></div>
+            <div class="divider orange darken-4" />
+        </div>
+
+        <div class="row">
+            <div class="col m6">
+                <form id="RegistrationNoForm">
+                    <div class="input-field">
+                        <span class="fa fa-hand-peace-o orange-text text-darken-4 prefix"></span>
+                        <input id="RegistrationNo" name="txtRegistrationNo" type="text">
+                        <label for="txtRegistrationNo">Registration No*</label>
+                    </div>
+                    <div class="input-field">
+                        <span class="fa fa-balance-scale orange-text text-darken-3 prefix" />
+                        <select id="PeriodOfArt" name="ddlPeriodOfArt">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in WhoIsWhereLists.PeriodOfCourse)
+                            {
+                                <option value="@item.Id">@item.Years years</option>
+                            }
+                        </select>
+                        <label for="ddlPeriodOfArt">Years*</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <button id="btnUpdateRegistrationNo" value="@student.Id"
+                    class="btn-floating btn-large waves-effect green right tooltipped"
+                    style="margin-top:-75px"
+                    data-position="left"
+                    data-delay="50"
+                    data-tooltip="Are you sure?">
+                <span class="fa fa-check"></span>
+            </button>
+        </div>
+    </div>
+</div>

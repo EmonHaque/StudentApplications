@@ -1,0 +1,17 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var student = (HRSupervisory)TempData["Join"];
+    var applicantname = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == student.Id).Select(x => x.Name).First();
+}
+
+<div class="container" style="margin-top:65px">
+    <div class="card">
+        <div class="card-content">
+            <div class="container">
+                <div>Hi <b><u>@applicantname</u></b>, we are reviewing your application. <br />Try again, later ...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

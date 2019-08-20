@@ -1,0 +1,335 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var info = (EmployeePaging)TempData["PartStaffs"];
+    List<Student4WhoWhere> emp2send = null;
+    List<NewApplication> app2send = null;
+    switch (info.Who)
+    {
+        case "employee":
+            emp2send = (List<Student4WhoWhere>)TempData["partEmployee"];
+            break;
+        case "cc":
+            emp2send = (List<Student4WhoWhere>)TempData["partCC"];
+            break;
+        case "articled":
+            emp2send = (List<Student4WhoWhere>)TempData["partArticled"];
+            break;
+        case "applied":
+            emp2send = (List<Student4WhoWhere>)TempData["partAFR"];
+            break;
+        case "partner":
+            emp2send = (List<Student4WhoWhere>)TempData["partPartner"];
+            break;
+        case "job":
+            app2send = (List<NewApplication>)TempData["JobApplicants"];
+            break;
+        case "student":
+            app2send = (List<NewApplication>)TempData["ArtApplicants"];
+            break;
+        default:
+            emp2send = (List<Student4WhoWhere>)TempData["partApprentice"];
+            break;
+    }
+    TempData.Keep();
+    IEnumerable<Student4WhoWhere> send = null;
+    if (info.Under != "applicant")
+    {
+        send = emp2send.Skip((info.PageNo - 1) * info.PageSize).Take(info.PageSize);
+    }
+
+    if (info.Under == "ex")
+    {
+        if (info.Who == "partner")
+        {
+            foreach (var student in send)
+            {
+                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg";
+                <div class="row" style="margin-bottom:2px">
+                    <div class="col m2">
+                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                    </div>
+                    <div class="col m10">
+                        <a name="ViewStaffCV" value="@student.Id"><b><u>@name</u></b></a>
+                        <div>from @student.JoinedOn.ToShortDateString() to @student.LeftOn.ToShortDateString()</div>
+                    </div>
+                </div>
+            }
+        }
+        else if (info.Who == "employee")
+        {
+            var allPartners = (List<Student4WhoWhere>)TempData["allPartners"];
+            var sup = (List<Student4WhoWhere>)TempData["huSup"];
+            TempData.Keep();
+            foreach (var student in send)
+            {
+                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                var lastStat = sup.Where(x => x.Id == student.Id).First();
+                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                var leftAs = Lists4CV.Status.Where(x => x.Id == lastStat.LastStatus).First().Name;
+                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg";
+                <div class="row" style="margin-bottom:2px">
+                    <div class="col m2">
+                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                    </div>
+                    <div class="col m10">
+                        <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                        <div>@status as @leftAs</div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            var allPartners = (List<Student4WhoWhere>)TempData["allPartners"];
+            var sup = (List<Student4WhoWhere>)TempData["huSup"];
+            TempData.Keep();
+            foreach (var student in send)
+            {
+                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                var lastStat = sup.Where(x => x.Id == student.Id).First();
+                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                var leftAs = Lists4CV.Status.Where(x => x.Id == lastStat.LastStatus).First().Name;
+                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg";
+                <div class="row" style="margin-bottom:2px">
+                    <div class="col m2">
+                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                    </div>
+                    <div class="col m10">
+                        <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                        <div>@status</div>
+                    </div>
+                </div>
+            }
+        }
+    }
+    else if (info.Under == "applicant")
+    {
+        var sendApp = app2send.Skip((info.PageNo - 1) * info.PageSize).Take(info.PageSize);
+        foreach (var student in sendApp)
+        {
+            var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+            <div class="row" style="margin-bottom:2px">
+                <div class="col m2">
+                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                </div>
+                <div class="col m10">
+                    <a name="SeeApplication2" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                    <div>Applied on @student.Date.ToLongDateString()</div>
+                    <div>@student.AppSubject</div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        if (info.Under == "others")
+        {
+            foreach (var student in send)
+            {
+                var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                var manager = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                <div class="row" style="margin-bottom:2px">
+                    <div class="col m2">
+                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                    </div>
+                    <div class="col m10">
+                        <a name="SeeStaffDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                        <div>Under @manager</div>
+                    </div>
+                </div>
+            }
+        }
+
+        else if (info.Who != "employee" && info.Who != "cc" && info.Under == "own")
+        {
+            if (info.Who != "articled")
+            {
+                foreach (var student in send)
+                {
+                    var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                    var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().ManagerId;
+                    var manager = WhoIsWhereLists.Managers.Where(x => x.Id == pid).First().Name;
+                    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                    <div class="row" style="margin-bottom:2px">
+                        <div class="col m2">
+                            <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                        </div>
+                        <div class="col m10">
+                            <a name="SeeStaffDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                            <div>Under @manager</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                foreach (var student in send)
+                {
+                    var regDate = WhoIsWhereLists.RegistrationDetail.Where(x => x.Id == student.Id).First().Date;
+                    DateDifference dd = new DateDifference(DateTime.Now.Date, regDate);
+                    var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                    var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().ManagerId;
+                    var manager = WhoIsWhereLists.Managers.Where(x => x.Id == pid).First().Name;
+                    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                    <div class="row" style="margin-bottom:2px">
+                        <div class="col m2">
+                            <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                        </div>
+                        <div class="col m10">
+                            <a name="SeeStaffDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                            <div>Under @manager</div>
+                            <p>
+                                @dd.Year year(s) @dd.Month month(s) @dd.Day day(s) elapsed
+                            </p>
+                        </div>
+                    </div>
+                }
+            }
+
+        }
+        else
+        {
+            if (info.Who == "employee")
+            {
+                foreach (var student in send)
+                {
+                    var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                    var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                    var manager = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                    <div class="row" style="margin-bottom:2px">
+                        <div class="col m2">
+                            <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                        </div>
+                        <div class="col m10">
+                            <a name="SeeStaffDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                            <div>@status</div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                foreach (var student in send)
+                {
+                    var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                    var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                    var manager = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                    <div class="row" style="margin-bottom:2px">
+                        <div class="col m2">
+                            <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                        </div>
+                        <div class="col m10">
+                            <a name="SeeStaffDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                            @*<div>@status of @manager</div>*@
+                        </div>
+                    </div>
+                }
+            }
+
+        }
+    }
+
+
+    <div id="@info.Who + Btns">
+        @{
+            var sent = info.PageNo * info.PageSize;
+            if (sent < info.TotalApps)
+            {
+                <div class="row">
+                    <button name="LoadAll"
+                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                            data-position="bottom"
+                            data-delay="50"
+                            data-val="@info.Who"
+                            data-info="@info.Under"
+                            data-tooltip="All">
+                        <span class="fa fa-long-arrow-down"></span>
+                    </button>
+
+                    <button name="LoadNext5"
+                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                            data-position="left"
+                            style="margin-right:5px"
+                            data-delay="50"
+                            data-val="@info.Who"
+                            data-info="@info.Under"
+                            data-tooltip="Next 5">
+                        <span class="fa fa-arrow-circle-right"></span>
+                    </button>
+                    @if (info.PageNo > 1)
+                    {
+                        <button name="LoadBack"
+                                class="btn-floating btn-small orange darken-1 left tooltipped"
+                                data-position="right"
+                                style="margin-right:5px"
+                                data-delay="50"
+                                data-val="@info.Who"
+                                data-info="@info.Under"
+                                data-tooltip="Previous 5">
+                            <span class="fa fa-arrow-circle-left"></span>
+                        </button>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <button name="LoadAll"
+                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                            data-position="bottom"
+                            data-delay="50"
+                            data-val="@info.Who"
+                            data-info="@info.Under"
+                            data-tooltip="All">
+                        <span class="fa fa-long-arrow-down"></span>
+                    </button>
+
+                    <button name="LoadBack"
+                            class="btn-floating btn-small orange darken-1 left tooltipped"
+                            data-position="right"
+                            style="margin-right:5px"
+                            data-delay="50"
+                            data-val="@info.Who"
+                            data-info="@info.Under"
+                            data-tooltip="Previous 5">
+                        <span class="fa fa-arrow-circle-left"></span>
+                    </button>
+                </div>
+            }
+
+            <div class="row">
+                @{
+                    int from, to, outof; from = to = 0;
+                    outof = info.TotalApps;
+                    if (info.PageNo == 1)
+                    {
+                        from = 1;
+                        if (info.TotalApps < info.PageSize)
+                        {
+                            to = info.TotalApps;
+                        }
+                        else
+                        {
+                            to = info.PageSize;
+                        }
+                    }
+                    else
+                    {
+                        from = (info.PageNo - 1) * info.PageSize + 1;
+                        to = from - 1 + info.PageSize;
+                        if (to > info.TotalApps)
+                        {
+                            to = info.TotalApps;
+                        }
+                    }
+                }
+                <p>@from to @to out of @outof</p>
+            </div>
+        }
+    </div>
+}

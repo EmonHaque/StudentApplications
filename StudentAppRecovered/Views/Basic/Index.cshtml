@@ -1,0 +1,105 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="container" style="margin-top:40px">
+    <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+        <div class="card-title orange darken-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>Basic Information</b></div>
+        </div>
+        <div class="card-content">
+            <form id="BasicForm">
+                <div class="input-field col s12">                   
+                    <span class="fa fa-user orange-text text-darken-3 prefix"/>
+                    <input id="Name" name="txtName" type="text">
+                    <label for="txtName">Name*</label>
+                </div>
+
+                <div class="input-field col s12">                  
+                    <span class="fa fa-male orange-text text-darken-3 prefix" />
+                    <input id="FatherName" name="txtFatherName" type="text">
+                    <label for="txtFatherName">Father's Name*</label>
+                </div>
+
+                <div class="input-field col s12">                   
+                    <span class="fa fa-female orange-text text-darken-3 prefix" />
+                    <input id="MotherName" name="txtMotherName" type="text">
+                    <label for="txtMotherName">Mother's Name*</label>
+                </div>
+                <div class="row">
+                    <div class="input-field col s4">
+                        <span class="fa fa-balance-scale orange-text text-darken-3 prefix" />
+                        <select id="Religion" name="ddlReligion">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in Lists4CV.Religions)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                        <label for="ddlReligion">Religion*</label>                        
+                    </div>
+
+                    <div class="input-field col s4">   
+                        <span class="fa fa-google orange-text text-darken-3 prefix" />                   
+                        <select id="Gender" name="ddlGender">
+                            <option value="" disabled selected>Choose</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                        </select>
+                        <label for="ddlGender">Gender*</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <span class="fa fa-medium orange-text text-darken-3 prefix" />
+                        <select id="MaritalStatus" name="ddlMaritalStatus">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in Lists4CV.MaritalStatus)
+                            {
+                                <option value="@item.Id">@item.Status</option>
+                            }
+                        </select>
+                        <label for="ddlMaritalStatus">Marital Status*</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-flag orange-text text-darken-3 prefix" />
+                        <input id="Nationality" name="txtNationality" type="text">
+                        <label for="txtNationality">Nationality*</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <span class="fa fa-ambulance orange-text text-darken-3 prefix" />
+                        <input id="DateOfBirth" name="txtDateOfBirth" type="text" class="datepicker">
+                        <label for="txtDateOfBirth">Date of birth*</label>
+                    </div>
+
+                    <div class="input-field col s2">
+                        <span class="fa fa-medkit orange-text text-darken-3 prefix" />
+                        <select id="Blood" name="ddlBlood">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in Lists4CV.BloodGroups)
+                            {
+                                <option value="@item.Id">@item.GroupName</option>
+                            }
+                        </select>
+                        <label for="ddlBlood">Blood*</label>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <button id="btnNexttoBasic"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Next">
+                    <span class="fa fa-arrow-circle-right"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

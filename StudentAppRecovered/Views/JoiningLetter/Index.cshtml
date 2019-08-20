@@ -1,0 +1,69 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+    var student = (HRSupervisory)TempData["Join"];
+    var partners = WhoIsWhereLists.Partners;
+    var partnerName = partners.Where(x => x.Id == student.PartnerId).Select(x => x.Name).First();
+    var partnerId = partners.Where(x => x.Id == student.PartnerId).Select(x => x.Id).First();
+    var applicantname = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == student.Id).Select(x => x.Name).First();
+}
+
+<div class="adjustheight">
+    <div class="container">
+        <div class="card-panel">
+            <div id="JoiningLetterContent">
+                <form id="JoiningLetterForm">
+                    <br />
+                    <div id="JoiningDate">Date: @DateTime.Now.ToShortDateString()</div>
+                    <br />
+                    To
+                    <br />
+                    <div id="PartnerId" data-val="@partnerId">@partnerName</div>
+                    Principal
+                    <br />
+                    BB Saha &amp; Haque
+                    <br />
+                    Chartered Accountants
+                    <br />
+                    22, Dilkusha C/A
+                    <br />
+                    Dhaka - 1000.
+                    <br />
+                    <div class="row" style="margin-left:0;padding-left:0">
+                        <div class="valign-wrapper" style="margin-left:0;padding-left:0">
+                            <div class="col s2 left-align" style="margin-left:0;padding-left:0">Subject: </div>
+                            <div class="col s10 input-field">
+                                <span class="fa fa-envira orange-text text-darken-3 prefix" />
+                                <input id="JoiningSubject" name="txtJoiningSubject" type="text">
+                                <label for="txtJoiningSubject">Write Subject*</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    Sir,
+                    <div class="input-field">
+                        <span class="fa fa-bars orange-text text-darken-3 prefix" />
+                        <textarea id="txtJoiningBody" name="JoiningBody" class="materialize-textarea" />
+                        <label for="JoiningBody">Write Body of Your Application</label>
+                    </div>
+                    Thanking You,
+                    <br />
+                    Sincerely Yours,
+                    <br /><br />
+                    <div id="ApplicantId" data-val="@student.Id">@applicantname</div>
+
+                </form>
+                <br /><br />
+                <div class="row">
+                    <button id="SubmitJoiningApp"
+                            class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                            data-position="left"
+                            data-delay="50"
+                            data-tooltip="Submit Joining letter">
+                        <span class="fa fa-arrow-circle-right"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

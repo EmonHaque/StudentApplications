@@ -1,0 +1,37 @@
+﻿@using StudentAppRecovered.Helper
+@{ 
+    var stud = (StudentId)TempData["Id"];
+    var formid = "Reference" + stud.id;
+
+}
+<form id="@formid">
+    <div class="card-panel wow bounceInDown" title="Reference">
+        <div class="input-field">
+            <span class="fa fa-user orange-text text-darken-3 prefix" />
+            <input title="ReferenceName" name="txtReferenceName" type="text">
+            <label for="txtReferenceName">Name*</label>
+        </div>
+        <div class="input-field">
+            <span class="fa fa-shield orange-text text-darken-3 prefix" />
+            <input title="ReferenceDesignation" name="txtRefDesignation" type="text">
+            <label for="txtRefDesignation">Designation*</label>
+        </div>
+        <div class="input-field">
+            <span class="fa fa-bank orange-text text-darken-3 prefix" />
+            <textarea title="OrganisationAddress" name="txtOrganisation" class="materialize-textarea"></textarea>
+            <label for="txtOrganisation">Organisation name and Address*</label>
+        </div>
+        <div class="row">
+            <div class="input-field col s4">
+                <span class="fa fa-phone orange-text text-darken-3 prefix" />
+                <input title="ReferenceContactNo" name="txtRefContactNo" type="text">
+                <label for="txtRefContactNo">Contact No.*</label>
+            </div>
+            <div class="input-field col s8">
+                <span class="fa fa-user-plus orange-text text-darken-3 prefix" />
+                <input title="ReferenceRelation" name="txtRefRelation" type="text">
+                <label for="txtRefRelation">Relation*</label>
+            </div>
+        </div>
+    </div>
+</form>

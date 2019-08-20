@@ -1,0 +1,142 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var apps = ((IEnumerable<RegularApplication>)ViewData["Apps"]);
+    var info = (ApplicationPaging)ViewData["AppsInfo"];
+}
+
+@if (apps.Count() > 0)
+{
+    <div class="card">
+        <div class="card-content">
+            <div class="row">
+                <table class="customtable">
+                    <thead>
+                        <tr class="white-text">
+                            <th>Subject</th>
+                            <th>Applicant</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var app in apps)
+                        {
+                            var name = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == app.Id).Select(x => x.Name).First();
+                            var applicationSub = WhoIsWhereLists.Applications.Where(x => x.Id == app.AppTypeId).Select(x => x.Type).First();
+                            <tr>
+                                <td>
+                                    @if (!app.PartnerReview)
+                                    {
+                                        <span class="fa fa-hand-o-right green-text" title="You've not yet reviewed it"></span>
+                                    }
+                                    else if (app.PartnerReview && app.PartnerNote != string.Empty)
+                                    {
+                                        <span class="fa fa-hand-stop-o" title="Reviewed and noted"></span>
+                                    }
+                                    else
+                                    {
+                                        <span class="fa fa-thumbs-o-up" title="You've not made any note on it"></span>
+                                    }
+                                    @if (app.ManagerNote != string.Empty)
+                                    {
+                                        <span class="fa fa-bolt" title="Manager wrote something"></span>
+                                    }
+                                    @if (app.Accepted == null)
+                                    {
+                                        <span class="fa fa-question" title="Decision is pending"></span>
+                                    }
+                                    else
+                                    {
+                                        if (Convert.ToBoolean(app.Accepted))
+                                        {
+                                            <span class="fa fa-check green-text" title="accepted"></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="fa fa-close red-text" title="Rejected"></span>
+                                        }
+                                    }
+                                    <a id="CheckApplication2" data-val="@app.Sl">@applicationSub</a>
+                                </td>
+                                <td>@name</td>
+                                <td>@app.Date.ToShortDateString()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                @if ((info.PageNo * info.PageSize) < info.TotalApps)
+                {
+                    if (info.PageNo == 1)
+                    {
+                        <button id="YourStudentsApps2"
+                                class="btn-floating btn-large orange darken-1 right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="Next">
+                            <span class="fa fa-long-arrow-right"></span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button id="YourStudentsApps2"
+                                class="btn-floating btn-large orange darken-1 right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="Next">
+                            <span class="fa fa-long-arrow-right"></span>
+                        </button>
+                        <button id="YourStudentsApps2Back" data-val="@info.PageNo"
+                                class="btn-floating btn-large orange darken-1 left tooltipped"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Previous">
+                            <span class="fa fa-long-arrow-left"></span>
+                        </button>
+                    }
+                }
+                else
+                {
+                    if (info.PageNo != 1)
+                    {
+                        <button id="YourStudentsApps2Back" data-val="@info.PageNo"
+                                class="btn-floating btn-large orange darken-1 left tooltipped"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Previous">
+                            <span class="fa fa-long-arrow-left"></span>
+                        </button>
+                    }
+                }
+            </div>
+            <div class="row">
+                    @{ 
+                        int from, to, outof; from = to = 0;
+                        outof = info.TotalApps;
+                        if (info.PageNo == 1)
+                        {
+                            from = 1;
+                            if(info.TotalApps < info.PageSize)
+                            {
+                                to = info.TotalApps;
+                            }
+                            else
+                            {
+                                to = info.PageSize;
+                            }
+                        }
+                        else
+                        {
+                            from = (info.PageNo - 1) * info.PageSize + 1;
+                            to = from - 1 + info.PageSize;
+                            if (to > info.TotalApps)
+                            {
+                                to = info.TotalApps;
+                            }
+                        }
+                    }
+                    <p>@from to @to out of @outof</p>    
+            </div>
+        </div>
+    </div>
+}

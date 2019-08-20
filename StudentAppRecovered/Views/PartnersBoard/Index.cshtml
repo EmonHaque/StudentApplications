@@ -1,0 +1,80 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+    var userName = Session["User"].ToString();
+    var partnerId = SiteUser.Users.Where(x => x.UserName == userName).Select(x => x.StudentId).First();
+    var exStaffs = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.LeftOn.Year != 1905).Count();
+
+    var students = Employee.GetYourStaffs(partnerId);
+    var otherStaffs = Employee.GetOthersStaffs(partnerId);
+    var apps = Employee.Applications(partnerId);
+    var newApps = apps.Where(x => !x.PartnerReview).Count();
+
+    var jobStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Job").Select(x => x.Id).First().ToString();
+    var stuStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Articleship").Select(x => x.Id).First().ToString();
+    var newApplicants = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Status == jobStat || x.Status == stuStat);
+}
+
+@{
+    <div class="nav-wrapper">
+        <ul class="side-nav fixed leftside-navigation">
+            <li><a id="Partners">Partners<span class="badge">@WhoIsWhereLists.Partners.Count()</span></a></li>
+            <li><a id="MyStaffs">Your Staffs<span class="badge">@students.Count()</span></a></li>
+            <li><a id="OthersStaffs">All Other Staffs<span class="badge">@otherStaffs.Count()</span></a></li>
+            <li><a id="ExStudentCV2">All Ex Staffs <span class="badge">@exStaffs</span></a></li>
+            <li><a id="ApplicantCV2">All New Applicant <span class="badge">@newApplicants.Count()</span></a></li>
+            <li><a id="YourStudentsApps2">Applications <span class="new badge">@newApps</span> </a></li>
+            <li><a id="refreshPartnersBoard">Reload <span class="badge fa fa-refresh green-text"></span></a></li>
+        </ul>
+    </div>
+
+    <div style="padding-left: 310px; margin-right:10px">
+        <div id="Partnerspinner" class="preloader-wrapper active"
+             style="display:none;position:absolute;top:45%;left:60%">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="adjustheight" id="PartnersBoardContent">
+            <div class="row">
+                <div class="col m4" id="StaffsChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Existing Staff</div>
+                            <div class="divider orange darken-3"/>
+                            <div id="StaffsChart"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col m4" id="ApplicationChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Application to You</div>
+                            <div class="divider orange darken-3" />
+                            <div id="ApplicationChart" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col m4" id="DecisionChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Your Decision on Application</div>
+                            <div class="divider orange darken-3" />
+                            <div id="DecisionChart" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    TempData["Staffs"] = students;
+    TempData["OthersStaffs"] = otherStaffs;
+    TempData["StudentAppRecovereds"] = apps;
+}

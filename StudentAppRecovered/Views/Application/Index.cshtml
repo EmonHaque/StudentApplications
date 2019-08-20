@@ -1,0 +1,806 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+    var student = (StudentInfo)TempData["Application"];
+    TempData.Keep("Application");
+}
+
+<div style="margin-top:40px">
+    <div class="row">
+        <div class="col m6">
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col m4">
+                                <img src="" width="150" height="150" id="Photo" class="responsive-img circle" />
+                            </div>
+                            <div class="col m8">
+                                <div class="card-title">@student.Name</div>
+                                <div><span class="fa fa-phone orange-text text-darken-4" />&nbsp;&nbsp;@student.ContactNo</div>
+                                @if (student.Email != null)
+                                {
+                                <div><span class="fa fa-envelope orange-text text-darken-4" />&nbsp;&nbsp;@student.Email</div>
+                                }
+                                <div class="divider orange darken-4" />
+                                <div><b>Present Address:</b></div>
+                                <div>
+                                    @{
+                                        var lines = student.PresentAddress.Split(new char[] { '\n' });
+                                        foreach (var line in lines)
+                                        {
+                                            if (line != string.Empty)
+                                            {
+                                    <div>@line</div>
+                                            }
+                                            else
+                                            {
+                                    <br />
+                                            }
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <div class="col m12">
+                                <form id="PhotoForm">
+                                    <div class="file-field input-field">
+                                        <div class="btn small orange darken-3 waves-effect tooltipped"
+                                             data-position="right"
+                                             data-delay="50"
+                                             data-tooltip="Choose a JPEG to upload">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                            <input type="file" name="UploadFile" id="txtUploadFile" />
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text">
+                                        </div>
+                                        <div id="PhotoError" />
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col m12">
+                                <button id="btnSubmitCV"
+                                        class="btn-floating green waves-effect right tooltipped"
+                                        data-position="left"
+                                        data-delay="50"
+                                        data-tooltip="Submit Application and CV">
+                                    <span class="fa fa-check"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Career Objective</b></div>
+                        <div class="divider orange darken-4" />
+                        @{
+                            var objlines = student.Objective.Split(new char[] { '\n' });
+                            foreach (var objline in objlines)
+                            {
+                                if (objline != string.Empty)
+                                {
+                        <div>@objline</div>
+                            }
+                            else
+                            {
+                        <br />
+                            }
+                        }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <div><b>Education</b></div>
+                    <div class="divider orange darken-4" />
+                    <div>
+                        @if (student.SSC.Board != null)
+                        {
+                            string boarduni = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.SSC.Board)).Select(x => x.Name).First();
+                        <p>Passed SSC from @student.SSC.Institute under @boarduni board in year @student.SSC.YearOfPass with a Grade/Division @student.SSC.CGPA</p><br />
+                        }
+                        else
+                        {
+                            var board = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.OLevel.Board)).Select(x => x.Name).First();
+                        <p>
+                            Passed O Level from @student.OLevel.Institute under @board in year @student.OLevel.YearOfPass with following
+                            <table class="striped bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var subject in student.OLevel.Subjects)
+                                        {
+                                    <tr>
+                                        <td>@subject.Name</td>
+                                        <td>@subject.Grade</td>
+                                    </tr>
+                                        }
+                                </tbody>
+                            </table>
+                            <br />
+                        </p>
+                        }
+
+                        @if (student.HSC.Board != null)
+                        {
+                            string boarduni = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.HSC.Board)).Select(x => x.Name).First();
+                        <p>Passed HSC from @student.HSC.Institute under @boarduni board in year @student.HSC.YearOfPass with a Grade/Division @student.HSC.CGPA</p><br />
+                        }
+                        else
+                        {
+                            var board = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.ALevel.Board)).Select(x => x.Name).First();
+                        <p>
+                            Passed A Level from @student.ALevel.Institute under @board in year @student.ALevel.YearOfPass with following
+                            <table class="striped bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    @foreach (var subject in student.ALevel.Subjects)
+                                        {
+                                    <tr>
+                                        <td>@subject.Name</td>
+                                        <td>@subject.Grade</td>
+                                    </tr>
+                                        }
+                                </tbody>
+                            </table>
+                            <br />
+                        </p>
+                        }
+
+                        @if (student.Bachelor.Title != null)
+                        {
+                            string title = Lists4CV.EducationTitle.Where(x => x.TitleId == Convert.ToInt32(student.Bachelor.Title)).Select(x => x.Title).First();
+                            string boarduni = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.Bachelor.University)).Select(x => x.Name).First();
+                        <p>Passed @title from @student.Bachelor.Institute under @boarduni board in year @student.Bachelor.YearOfPass with a Grade/Class @student.Bachelor.CGPA</p><br />
+                        }
+
+                        @if (student.Master.Title != null)
+                        {
+                            string title = Lists4CV.EducationTitle.Where(x => x.TitleId == Convert.ToInt32(student.Master.Title)).Select(x => x.Title).First();
+                            string boarduni = Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.Master.University)).Select(x => x.Name).First();
+                        <p>Passed @title from @student.Master.Institute under @boarduni board in year @student.Master.YearOfPass with a Grade/Class @student.Master.CGPA</p><br />
+                        }
+
+                        @if (student.CMA.Institute != null)
+                        {
+                        <p>Passed CMA in year @student.CMA.YearOfPass under @student.CMA.Institute</p><br />
+                        }
+
+                        @if (student.ACCA.Institute != null)
+                        {
+                        <p>Passed CCA in year @student.ACCA.YearOfPass under @student.ACCA.Institute</p><br />
+                        }
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="col m6">
+            @if (student.AppSubject != null)
+            {
+                <div class="row">
+                    <div class="card">
+                        <div class="card-content">
+                            <div><b>Application</b></div>
+                            <div class="divider orange darken-4" />
+                            Date: <b><u>@DateTime.Now.ToShortDateString()</u></b>
+                            <br /><br />
+                            To
+                            <br />
+                            The Board of Partners
+                            <br />
+                            BB Saha &amp; Haque
+                            <br />
+                            Chartered Accountants
+                            <br />
+                            22, Dilkusha C/A
+                            <br />
+                            Dhaka - 1000.
+                            <br /><br />
+                            Subject: <b><u>@student.AppSubject</u></b>
+                            <br /><br />
+                            Sir,
+                            <br />
+                            @student.AppBody
+                            <br /><br />
+                            Thanking You,
+                            <br />
+                            Sincerely Yours,
+                            <br />
+                            <div>@student.Name</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Basic Information</b></div>
+                        <div class="divider orange darken-4" />
+                        <div class="row">
+                            <div class="col m4">Father's Name</div>
+                            <div class="col m8">: @student.FatherName</div>
+                            <div class="col m4">Mother's Name</div>
+                            <div class="col m8">: @student.MotherName</div>
+                            <div class="col m4">Religion</div>
+                            <div class="col m8">: @Lists4CV.Religions.Where(x => x.Id == Convert.ToInt32(student.Religion)).Select(x => x.Name).First()</div>
+                            <div class="col m4">Gender</div>
+                            <div class="col m8">: @student.Gender</div>
+                            <div class="col m4">Marital Status</div>
+                            <div class="col m8">: @Lists4CV.MaritalStatus.Where(x => x.Id == Convert.ToInt32(student.MaritalStatus)).Select(x => x.Status).First()</div>
+                            <div class="col m4">Nationality</div>
+                            <div class="col m8">: @student.Nationality</div>
+                            <div class="col m4">Date of birth</div>
+                            <div class="col m8">: @student.DateOfBirth</div>
+                            <div class="col m4">Blood</div>
+                            <div class="col m8">: @Lists4CV.BloodGroups.Where(x => x.Id == Convert.ToInt32(student.Blood)).Select(x => x.GroupName).First()</div>
+                            <div class="col m4">Permanent Address</div>
+                            <div class="col m8">
+                                @{
+                                var rows = student.PermanentAddress.Split(new char[] { '\n' });
+                                var rowcount = 0;
+                                foreach (var row in rows)
+                                {
+                                    if (rowcount == 0)
+                                    {
+                                <div>: @row</div>
+                                    }
+                                    else
+                                    {
+                                <div>&nbsp; @row</div>
+                                    }
+                                    rowcount++;
+                                }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @if (student.ApplicationFor == "Partner")
+            {
+                <div class="row">
+                    <div class="card">
+                        <div class="card-content">
+                            <div><b>Membership</b></div>
+                            <div class="divider orange darken-4" />
+                            @foreach (var item in student.PartnerMembership)
+                            {
+                                var org = Lists4CV.MemberOf.Where(x => x.Id == Convert.ToInt32(item.Organisation)).Select(x => x.Organisation).First();
+                                <div>Id# @item.Id, @org</div>
+                            }
+                            <br />
+                            @if (student.PartnerCurrentPosition != null)
+                            {
+                                if (student.PartnerCurrentPosition.Count > 0)
+                                {
+                                    <div><b>Current Position</b></div>
+                                    <div class="divider orange darken-4" />
+                                    foreach (var item in student.PartnerCurrentPosition)
+                                    {
+                                        <div><strong>@item.Position, @item.Organisation</strong>, from @item.From.ToShortDateString()</div>
+                                    }
+                                    <br />
+                                }
+                            }
+
+                            @if (student.PartnerPastPosition != null)
+                            {
+                                if (student.PartnerPastPosition.Count > 0)
+                                {
+                                    <div><b>Past Position</b></div>
+                                    <div class="divider orange darken-4" />
+                                    foreach (var item in student.PartnerPastPosition)
+                                    {
+                                        <div><strong>@item.Position, @item.Organisation</strong>, from @item.From.ToShortDateString() to @item.To.ToShortDateString()</div>
+                                    }
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+            
+
+            @if (student.ApplicationFor == "Job")
+            {
+                if (student.Experiences != null || student.CurrentJob != null)
+                {
+                    <div class="row">
+                        <div class="card">
+                            <div class="card-content">
+                                <div><b>Experience</b></div>
+                                <div class="divider orange darken-4" />
+                                @if (student.CurrentJob != null)
+                                {
+                                    if (student.CurrentJob.Position != null)
+                                    {
+                                        var curreslines = student.CurrentJob.Responsibilities.Split(new char[] { '\n' });
+                                        <p>
+                                            Currently working in @student.CurrentJob.Organisation as @student.CurrentJob.Position from @student.CurrentJob.From.ToShortDateString() with following responsibilities -
+                                            <ul>
+                                                @foreach (var curres in curreslines)
+                                                {
+                                                    <li><span class="fa fa-arrow-circle-right orange-text text-darken-4"></span> @curres</li>
+                                                }
+                                            </ul>
+                                        </p>
+                                    }
+                                }
+
+                                @if (student.Experiences != null)
+                                {
+                                    if (student.Experiences.Count > 0)
+                                    {
+                                        foreach (var experience in student.Experiences)
+                                        {
+                                            var pasreslines = experience.Responsibilities.Split(new char[] { '\n' });
+                                            <p>
+                                                Worked in @experience.Organisation as @experience.Position from @experience.From.ToShortDateString() to @experience.To.ToShortDateString() with following responsibilities -
+                                                <ul>
+                                                    @foreach (var pasres in pasreslines)
+                                                    {
+                                                        <li><span class="fa fa-arrow-circle-right orange-text text-darken-4"></span> @pasres</li>
+                                                    }
+                                                </ul>
+                                            </p>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Emergency Contact No.</b></div>
+                        <div class="divider orange darken-4" />
+                        <div><span class="fa fa-phone orange-text text-darken-4" />&nbsp; @student.EmergencyContactNo</div>
+                        <div>Relation: @student.RelationWithEmergencyContact</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Reference</b></div>
+                        <div class="divider orange darken-4" />
+                        @foreach (var reference in student.Reference)
+                        {
+                            var orglines = reference.Organisation.Split(new char[] { '\n' });
+                        <div><em>@reference.Name</em></div>
+                        <div>@reference.Designation</div>
+                        <div>
+                            @foreach (var orgline in orglines)
+                                {
+                            <div>@orgline</div>
+                                }
+                        </div>
+                        <div><span class="fa fa-phone orange-text text-darken-4" />&nbsp; @reference.ContactNo</div>
+                        <div>Relation: @reference.Relation</div>
+                        <br />
+                        }
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+@*<div class="container">
+        <div class="card-panel">
+            <h3>Career Objective</h3>
+            <hr />
+            <div class="row">
+                <div class="col s12">
+                    @{
+                        var objlines = student.Objective.Split(new char[] { '\n' });
+                        foreach (var objline in objlines)
+                        {
+                            if (objline != string.Empty)
+                            {
+                                <p>@objline</p>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="card-panel">
+            <h3>Basic Information</h3>
+            <hr />
+            <div class="row">
+                <div class="row">
+                    <div class="col s9">
+                        <div class="col s3">Name</div>
+                        <div class="col s9">: @student.Name</div>
+                        <div class="col s3">Father's Name</div>
+                        <div class="col s9">: @student.FatherName</div>
+                        <div class="col s3">Mother's Name</div>
+                        <div class="col s9">: @student.MotherName</div>
+                        <div class="col s3">Religion</div>
+                        <div class="col s9">: @Lists4CV.Religions.Where(x => x.Id == Convert.ToInt32(student.Religion)).Select(x => x.Name).First()</div>
+                        <div class="col s3">Gender</div>
+                        <div class="col s9">: @student.Gender</div>
+                        <div class="col s3">Marital Status</div>
+                        <div class="col s9">: @Lists4CV.MaritalStatus.Where(x => x.Id == Convert.ToInt32(student.MaritalStatus)).Select(x => x.Status).First()</div>
+                        <div class="col s3">Nationality</div>
+                        <div class="col s9">: @student.Nationality</div>
+                        <div class="col s3">Date of birth</div>
+                        <div class="col s9">: @student.DateOfBirth</div>
+                        <div class="col s3">Blood</div>
+                        <div class="col s9">: @Lists4CV.BloodGroups.Where(x => x.Id == Convert.ToInt32(student.Blood)).Select(x => x.GroupName).First()</div>
+                    </div>
+                    <div class="col s3">
+                        <img src="" width="180" height="180" id="Photo" /><br />
+                        <form id="PhotoForm">
+                            <input type="file" name="UploadFile" id="txtUploadFile" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-panel">
+            <h3>Contact Details</h3>
+            <hr />
+            <div class="row">
+                <div class="col s3">Contact No.</div>
+                <div class="col s9">: @student.ContactNo</div>
+                <div class="col s3">Email</div>
+                <div class="col s9">: @student.Email</div>
+                <div class="col s3">Present Address</div>
+                <div class="col s9">
+                    @{
+                        var lines = student.PresentAddress.Split(new char[] { '\n' });
+                        var count = 0;
+                        foreach (var line in lines)
+                        {
+                            if (count == 0)
+                            {
+                                <div>: @line</div>
+                            }
+                            else
+                            {
+                                <div>&nbsp; @line</div>
+                            }
+                            count++;
+                        }
+                    }
+                </div>
+                <div class="col s3">Permanent Address</div>
+                <div class="col s9">
+                    @{
+                        var rows = student.PermanentAddress.Split(new char[] { '\n' });
+                        var rowcount = 0;
+                        foreach (var row in rows)
+                        {
+                            if (rowcount == 0)
+                            {
+                                <div>: @row</div>
+                            }
+                            else
+                            {
+                                <div>&nbsp; @row</div>
+                            }
+                            rowcount++;
+                        }
+                    }
+                </div>
+                <div class="col s3">Emergency Contact No.</div>
+                <div class="col s9">: @student.EmergencyContactNo</div>
+                <div class="col s3">Relation with Emergency Contact No. holder</div>
+                <div class="col s9">: @student.RelationWithEmergencyContact</div>
+            </div>
+        </div>
+        @if (student.ApplicationFor == "Partner")
+        {
+
+            <div class="card-panel">
+                <h3 class="header3">Membership</h3>
+                <hr />
+                @foreach (var item in student.PartnerMembership)
+                    {
+                        var org = Lists4CV.MemberOf.Where(x => x.Id == Convert.ToInt32(item.Organisation)).Select(x => x.Organisation).First();
+                    <div>Membership# @item.Id, @org</div>
+                }
+            </div>
+
+            if (student.PartnerCurrentPosition != null)
+            {
+                <div class="card-panel">
+                    <h3 class="header3">Current Position</h3>
+                    <hr />
+                    @foreach (var item in student.PartnerCurrentPosition)
+                        {
+                        <div><strong>@item.Position, @item.Organisation</strong>, from @item.From.ToShortDateString()</div>
+                    }
+                </div>
+            }
+
+            if (student.PartnerPastPosition != null)
+            {
+                <div class="card-panel">
+                    <h3 class="header3">Past Position</h3>
+                    <hr />
+                    @foreach (var item in student.PartnerPastPosition)
+                        {
+                        <div><strong>@item.Position, @item.Organisation</strong>, from @item.From.ToShortDateString() to @item.To.ToShortDateString()</div>
+                    }
+                </div>
+            }
+        }
+
+        @if (student.ApplicationFor == "Job")
+        {
+            if (student.CurrentJob != null || student.Experiences != null)
+            {
+                <div class="card-panel">
+                    <h3>Experience(s)</h3>
+                    <hr />
+                    @if (student.CurrentJob != null)
+                        {
+                            var curreslines = student.CurrentJob.Responsibilities.Split(new char[] { '\n' });
+                        <div class="card-panel">
+                            <h4>Current Position</h4>
+                            <hr />
+                            <div class="row">
+                                <div class="col s12"><strong>@student.CurrentJob.Position</strong></div>
+                                <div class="col s12"><strong>@student.CurrentJob.Organisation</strong></div>
+                                <div class="col s12">Working from @student.CurrentJob.From.ToShortDateString()</div>
+                                <div class="col s3">Responsibilities: </div>
+                                <div class="col s9">
+                                    @foreach (var curres in curreslines)
+                                    {
+                                        <div>@curres</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (student.Experiences != null)
+                        {
+                        <div class="card-panel">
+                            <h4>Past Position(s)</h4>
+                            <hr />
+                            @foreach (var experience in student.Experiences)
+                            {
+                                var pasreslines = experience.Responsibilities.Split(new char[] { '\n' });
+                                <div class="row">
+                                    <div class="col s12"><strong>@experience.Position</strong></div>
+                                    <div class="col s12"><strong>@experience.Organisation</strong></div>
+                                    <div class="col s12">From @experience.From.ToShortDateString() to @experience.To.ToShortDateString()</div>
+                                    <div class="col s3">Responsibilities:</div>
+                                    <div class="col s9">
+                                        @foreach (var pasres in pasreslines)
+                                        {
+                                            <div>@pasres</div>
+                                        }
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        }
+
+        <div class="card-panel">
+            <h3>Education</h3>
+            <hr />
+            <div class="row">
+                <div class="col s12">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Institute</th>
+                                <th>Board</th>
+                                <th>Year</th>
+                                <th>CGPA</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (student.SSC.Board != null)
+                            {
+
+                                <tr>
+                                    <td>SSC</td>
+                                    <td>@student.SSC.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.SSC.Board)).Select(x => x.Name).First()</td>
+                                    <td>@student.SSC.YearOfPass</td>
+                                    <td>@student.SSC.CGPA</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>O Level</td>
+                                    <td>@student.OLevel.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.OLevel.Board)).Select(x => x.Name).First()</td>
+                                    <td>@student.OLevel.YearOfPass</td>
+                                    <td>-</td>
+                                </tr>
+                            }
+                            @if (student.HSC.Board != null)
+                            {
+                                <tr>
+                                    <td>HSC</td>
+                                    <td>@student.HSC.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.HSC.Board)).Select(x => x.Name).First()</td>
+                                    <td>@student.HSC.YearOfPass</td>
+                                    <td>@student.HSC.CGPA</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td>A Level</td>
+                                    <td>@student.ALevel.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.ALevel.Board)).Select(x => x.Name).First()</td>
+                                    <td>@student.ALevel.YearOfPass</td>
+                                    <td>-</td>
+                                </tr>
+                            }
+                            @if (student.Bachelor.Title != null)
+                            {
+                                <tr>
+                                    <td>@Lists4CV.EducationTitle.Where(x => x.TitleId == Convert.ToInt32(student.Bachelor.Title)).Select(x => x.Title).First()</td>
+                                    <td>@student.Bachelor.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.Bachelor.University)).Select(x => x.Name).First()</td>
+                                    <td>@student.Bachelor.YearOfPass</td>
+                                    <td>@student.Bachelor.CGPA</td>
+                                </tr>
+                            }
+                            @if (student.Master.Title != null)
+                            {
+                                <tr>
+                                    <td>@Lists4CV.EducationTitle.Where(x => x.TitleId == Convert.ToInt32(student.Master.Title)).Select(x => x.Title).First()</td>
+                                    <td>@student.Master.Institute</td>
+                                    <td>@Lists4CV.BoardUniversity.Where(x => x.Id == Convert.ToInt32(student.Master.University)).Select(x => x.Name).First()</td>
+                                    <td>@student.Master.YearOfPass</td>
+                                    <td>@student.Master.CGPA</td>
+                                </tr>
+                            }
+                            @if (student.CMA.Institute != null)
+                            {
+                                <tr>
+                                    <td>CMA</td>
+                                    <td>@student.CMA.Institute</td>
+                                    <td>-</td>
+                                    <td>@student.CMA.YearOfPass</td>
+                                    <td>-</td>
+                                </tr>
+                            }
+                            @if (student.ACCA.Institute != null)
+                            {
+                                <tr>
+                                    <td>CCA</td>
+                                    <td>@student.ACCA.Institute</td>
+                                    <td>-</td>
+                                    <td>@student.ACCA.YearOfPass</td>
+                                    <td>-</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if (student.OLevel.Board != null || student.ALevel.Board != null)
+                {
+                <div class="row">
+                    <h4>Details of O/A Level</h4>
+                    <hr />
+                    <div class="col s12">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Level</th>
+                                    <th>Subject</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (student.OLevel.Board != null)
+                                {
+                                    foreach (var item in student.OLevel.Subjects)
+                                    {
+                                        <tr>
+                                            <td>O</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Grade</td>
+                                        </tr>
+                                    }
+                                }
+
+                                @if (student.ALevel.Board != null)
+                                {
+                                    foreach (var item in student.ALevel.Subjects)
+                                    {
+                                        <tr>
+                                            <td>A</td>
+                                            <td>@item.Name</td>
+                                            <td>@item.Grade</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="card-panel">
+            <h3>Reference(s)</h3>
+            <hr />
+            <div class="row">
+                @foreach (var reference in student.Reference)
+                {
+                    <div class="col s6">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="card-title">@reference.Name</div>
+                                <div>@reference.Designation</div>
+                                <div>
+                                    @{
+                                        var orglines = reference.Organisation.Split(new char[] { '\n' });
+                                        foreach (var orgline in orglines)
+                                        {
+                                            <div>@orgline</div>
+                                        }
+                                    }
+                                </div>
+                                <div>Phone: @reference.ContactNo</div>
+                                <div>Relation: @reference.Relation</div>
+                            </div>
+                        </div>
+                    </div>
+                                        }
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <button id="btnSubmitCV" class="btn waves-effect waves-light right">
+                    Submit
+                    <i class="material-icons mdi-content-send right"></i>
+                </button>
+            </div>
+        </div>
+    </div>*@

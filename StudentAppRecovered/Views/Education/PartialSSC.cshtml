@@ -1,0 +1,38 @@
+﻿@using StudentAppRecovered.Helper
+<form id="SSCForm" class="wow bounceInDown">
+    <div class="card">
+        <div class="card-title orange lighten-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>SSC</b></div>
+        </div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s4">
+                    <span class="fa fa-bold orange-text text-darken-3 prefix" />
+                    <select id="SSCBoard" name="ddlSSCBoard">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in Lists4CV.BoardUniversity.Where(x => x.Level == "SSCHSC"))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <label for="ddlBoard">Board*</label>
+                </div>
+                <div class="input-field col s4">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input id="SSCYearOfPass" name="txtYearOfPass" type="text">
+                    <label for="txtYearOfPass">Year of pass*</label>
+                </div>
+                <div class="input-field col s4">
+                    <span class="fa fa-star orange-text text-darken-3 prefix" />
+                    <input id="SSCCGPA" name="txtCGPA" type="text">
+                    <label for="txtCGPA">CGPA/Division*</label>
+                </div>
+                <div class="input-field col s12">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <input id="SSCInstitute" name="txtInstitute" type="text">
+                    <label for="txtInstitute">Institute*</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

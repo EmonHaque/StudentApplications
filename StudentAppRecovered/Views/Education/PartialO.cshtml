@@ -1,0 +1,127 @@
+﻿@using StudentAppRecovered.Helper
+
+<div class="card wow bounceInDown">
+    <div class="card-title orange lighten-3">
+        <div class="header2 white-text" style="margin:0 10px"><b>O Level</b></div>
+    </div>
+    <div class="card-content">
+        <form id="OForm">
+            <div class="row">
+                <div class="input-field col m8">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <input id="OInstitute" name="txtInstitute" type="text">
+                    <label for="txtInstitute">Institute*</label>
+                </div>
+                <div class="input-field col m4">
+                    <span class="fa fa-bold orange-text text-darken-3 prefix" />
+                    <select id="OBoard" name="ddlOBoard">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in Lists4CV.BoardUniversity.Where(x => x.Level == "OA"))
+                        {
+                        <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <label for="ddlBoard">Board*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m4">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input id="OYearOfPass" name="txtYearOfPass" type="text">
+                    <label for="txtYearOfPass">Year of pass*</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="subjects">
+                    <div><b>Subjects</b></div>
+                    <div class="divider orange darken-4" />
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[1]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[1]" type="text">
+                        </div>
+                    </div>
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[2]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[2]" type="text">
+                        </div>
+                    </div>
+
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[3]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[3]" type="text">
+                        </div>
+                    </div>
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[4]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[4]" type="text">
+                        </div>
+                    </div>
+
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[5]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[5]" type="text">
+                        </div>
+                    </div>
+                    <div title="OSubjects">
+                        <div class="input-field col s4">
+                            <label for="txtOSubject">Subject*</label>
+                            <input title="OSubject" name="txtOSubject[6]" type="text">
+                        </div>
+                        <div class="input-field col s2">
+                            <label for="txtOGrade">Grade*</label>
+                            <input title="OGrade" name="txtOGrade[6]" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col m6">
+                <button id="btnAddOSubject"
+                        class="btn-floating btn-large orange darken-3 waves-effect left tooltipped"
+                        style="margin-right:5px"
+                        data-position="right"
+                        data-delay="50"
+                        data-tooltip="Add one more subject">
+                    <span class="fa fa-plus-circle"></span>
+                </button>
+            </div>
+            <div class="col m6">
+                <button id="btnRemoveOSubject"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Remove last subject">
+                    <span class="fa fa-minus-circle"></span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>

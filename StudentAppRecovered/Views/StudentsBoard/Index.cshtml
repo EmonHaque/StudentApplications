@@ -1,0 +1,63 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+    var userName = Session["User"].ToString();
+    var studentId = SiteUser.Users.Where(x => x.UserName == userName).Select(x => x.StudentId).First();
+    var apps = Employee.Applications(studentId).OrderByDescending(x => x.Sl).ToList();
+}
+
+
+<div class="nav-wrapper">
+    <ul class="side-nav fixed leftside-navigation">
+        <li><a id="Profile">CV</a></li>
+        <li><a id="SubmitApplication">Apply</a></li>
+        <li><a id="Applied">Applied <span class="badge">@apps.Count()</span></a></li>
+        <li><a id="refreshStudentsBoard">Reload <span class="badge fa fa-refresh green-text"></span></a></li>
+    </ul>
+</div>
+
+
+<div class="row">
+    <div style="padding-left: 310px; margin-right:10px">
+        <div id="StudentSpinner" class="preloader-wrapper active"
+             style="display:none;position:absolute;top:45%;left:60%">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="adjustheight" id="StudentsBoard">
+            <div class="row">
+                <div class="col m7" id="ApplicationChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Application</div>
+                            <div class="divider orange darken-3" />
+                            <div id="ApplicationChart" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col m5" id="DecisionChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Decision on Application</div>
+                            <div class="divider orange darken-3" />
+                            <div id="DecisionChart" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{ 
+    TempData["MyApplications1"] = apps;
+    //TempData.Keep("MyApplications1");
+}
+

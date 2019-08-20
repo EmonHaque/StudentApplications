@@ -1,0 +1,60 @@
+﻿@using StudentAppRecovered.Helper
+
+<div class="card wow bounceInRight">
+    <div class="container">
+
+        @{
+            var user = (Users)TempData["Users"];
+            <div class="row">
+                
+                <div class="col s6">
+                    <label for="ddlRole">Role</label>
+                    <select class="error browser-default" id="Role" name="ddlRole" title="dropdownlist">
+                        @if (user.Role == "Administrator")
+                        {
+                            <option selected>Administrator</option>
+                                <option>Manager</option>
+                                <option>Student</option>
+                        }
+                        else if (user.Role == "Manager")
+                        {
+                            <option>Administrator</option>
+                                <option selected>Manager</option>
+                                <option>Student</option>
+                        }
+                        else
+                        {
+                            <option>Administrator</option>
+                                <option>Manager</option>
+                                <option selected>Student</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="col s6">
+                    <label for="ddlStatus">Status</label>
+                    <select class="error browser-default" id="Status" name="ddlStatus" title="dropdownlist">
+                        @if (user.Status != "locked")
+                        {
+                            <option selected>Active</option>
+                                <option>Lock</option>
+                        }
+                        else
+                        {
+                            <option selected>Locked</option>
+                                <option>Activate</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s8">
+                    <input id="txtUserName" name="txtUserName" type="text" value="@user.UserName" disabled>
+                </div>
+                <div class="col s4">
+                    <input id="UserUpdate" type="button" value="Update" class="btn waves-effect" />
+                </div>
+            </div>
+        }
+    </div>
+</div>

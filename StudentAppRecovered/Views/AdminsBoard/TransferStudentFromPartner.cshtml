@@ -1,0 +1,63 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var lot = (LeftOrTerminated)TempData["Student4Transfer"];
+    TempData.Keep("Student4Transfer");
+    var partners = WhoIsWhereLists.Partners.Where(x=>x.Id != lot.Id);
+
+}
+
+<div class="row" style="margin-bottom:0">
+    <button id="CloseTransferDiv"
+            class="btn-floating orange darken-4 right tooltipped"
+            data-position="left"
+            data-delay="50"
+            data-tooltip="Click to Close">
+        <span class="fa fa-remove"></span>
+    </button>
+</div>
+<div class="row">
+    <div><b>Transfer Student(s)</b></div>
+    <div class="divider orange darken-4" />
+</div>
+<div class="row">
+    <div class="col m6">
+        <img id="partnerImage2" src="" height="150" width="150" class="responsive-img circle" />
+    </div>
+    <div class="col m6">
+        <img id="managerImage" src="" height="150" width="150" class="responsive-img circle" />
+    </div>
+</div>
+
+<div class="row">
+    <form id="AllStudentTransferForm">
+        <div class="input-field">
+            <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+            <select id="SelectPartner2" name="ddlSelectPartner2">
+                <option value="" disabled selected>Choose</option>
+                @foreach (var item in partners)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+            <label for="ddlSelectPartner2">Select partner*</label>
+        </div>
+
+        <div class="input-field">
+            <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+            <select id="SelectManager" name="ddlSelectManager" title="dropdownlist">
+                <option value="" disabled selected>Choose</option>
+            </select>
+            <label for="ddlSelectManager">Select manager*</label>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <button id="btnTransferAllStudent"
+            class="btn-floating btn-large waves-effect green right tooltipped"
+            value="@lot.Id"
+            data-position="left"
+            data-delay="50"
+            data-tooltip="Are you sure?">
+        <span class="fa fa-check"></span>
+    </button>
+</div>

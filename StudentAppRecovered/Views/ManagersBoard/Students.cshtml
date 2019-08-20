@@ -1,0 +1,213 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var students = (IEnumerable<Student4WhoWhere>)TempData["ManagableStudents"];
+    TempData.Keep("ManagableStudents");
+    var articledId = Lists4CV.Status.Where(x => x.Name == "Articled").Select(x => x.Id).First().ToString();
+    var apprenticeId = Lists4CV.Status.Where(x => x.Name == "Apprentice").Select(x => x.Id).First().ToString();
+    var appliedId = Lists4CV.Status.Where(x => x.Name == "Applied for Registration").Select(x => x.Id).First().ToString();
+
+    var apperntice = students.Where(x => x.Status == apprenticeId);
+    var articled = students.Where(x => x.Status == articledId);
+    var applied = students.Where(x => x.Status == appliedId);
+
+    TempData["partApprentice"] = apperntice.ToList();
+    TempData["partArticled"] = articled.ToList();
+    TempData["partAFR"] = applied.ToList();
+
+    int apprenticeCount, articledCount, appliedCount;
+    apprenticeCount = apperntice.Count();  articledCount = articled.Count();  appliedCount = applied.Count();
+    if (apprenticeCount > 5) { apperntice = apperntice.Take(5); }
+    if (articledCount > 5) { articled = articled.Take(5); }
+    if (appliedCount > 5) { applied = applied.Take(5); }
+}
+
+<div class="row">
+    <div class="col m6">
+        @if (apperntice.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Apprentice</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@apprenticeCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="apprenticeDiv">
+                            @foreach (var student in apperntice)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                                var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                                var partner = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeStudentDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                                    <div>Under @partner</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (apprenticeCount > 5)
+                        {
+                            <div id="apprenticeBtns">
+                                <div class="row">
+                                    <button name="ManLoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="apprentice"
+                                            data-info="own"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (apprenticeCount >= 10)
+                                    {
+                                        <button name="ManLoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="apprentice"
+                                                data-info="own"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (applied.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Applied for Registration</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@appliedCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="appliedDiv">
+                            @foreach (var student in applied)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                                var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                                var partner = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeStudentDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                                    <div>Under @partner</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (appliedCount > 5)
+                        {
+                            <div id="appliedBtns">
+                                <div class="row">
+                                    <button name="ManLoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="applied"
+                                            data-info="own"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (appliedCount >= 10)
+                                    {
+                                        <button name="ManLoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="applied"
+                                                data-info="own"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col m6">
+        @if (articled.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Articled</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@articledCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="articledDiv">
+                            @foreach (var student in articled)
+                            {
+                                var regDate = WhoIsWhereLists.RegistrationDetail.Where(x => x.Id == student.Id).First().Date;
+                                DateDifference dd = new DateDifference(DateTime.Now.Date, regDate);
+                                var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+                                var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+                                var partner = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+                                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeStudentDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                                    <div>Under @partner</div>
+                                    <p>
+                                        @dd.Year year(s) @dd.Month month(s) @dd.Day day(s) elapsed
+                                    </p>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (articledCount > 5)
+                        {
+                            <div id="articledBtns">
+                                <div class="row">
+                                    <button name="ManLoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="articled"
+                                            data-info="own"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (articledCount >= 10)
+                                    {
+                                        <button name="ManLoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="articled"
+                                                data-info="own"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

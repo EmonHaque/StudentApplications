@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+}
+
+
+<div class="card" style="border:1px solid #e65100; width:300px; position:absolute; left:40%;top:10%">
+    <div class="card-title orange darken-3">
+        <div class="header2 white-text" style="margin:0 10px"><b>Sign-in</b></div>
+    </div>
+
+    <div class="card-content">
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fa fa-user prefix orange-text text-darken-3"></i>
+                <input id="UserName" name="txtUserName" type="text">
+                <label for="txtUserName">Username*</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <i class="fa fa-eye prefix orange-text text-darken-3"></i>
+                <input id="Password" name="txtPassword" type="password">
+                <label for="txtPassword">Password*</label>
+            </div>
+        </div>
+        <div class="divider orange darken-3" />
+        <div class="row">
+            <button id="btnLogin"
+                    class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                    style="margin-top:10px"
+                    data-position="left"
+                    data-delay="50"
+                    data-tooltip="Log in">
+                <span class="fa fa-arrow-circle-right"></span>
+            </button>
+            @*<div class="input-field col s12">
+                    <input type="button" value="Login" class="btn waves-effect right" id="btnLogin" />
+                </div>*@
+        </div>
+        <h4 id="message" style="color:red"></h4>
+    </div>
+</div>
+
+

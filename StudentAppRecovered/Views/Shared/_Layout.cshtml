@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href="~/css/materialize.css" rel="stylesheet" />
+    @*<link href="~/css/materialize.min.css" rel="stylesheet" />*@
+    <link href="~/css/animate.css" rel="stylesheet" />
+    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/Custom.css" rel="stylesheet" />
+    <noscript>
+        Enable JavaScript!
+    </noscript>
+</head>
+<body>
+    <header style="height:30px">
+        <div class="navbar-fixed">
+            <nav>
+                <div class="nav-wrapper orange darken-3 fixed">
+                    <div class="container" style="width:95%">
+                        <a href="#" class="brand-logo"><strong>BB SAHA &amp; HAQUE</strong></a>
+                        <ul id="GenNav" class="right hide-on-med-and-down">
+                            <li><a id="navAbout">About</a></li>
+                            <li><a id="navLogin"><span class="fa fa-user"></span> Login</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <main style="margin-top:-25px">
+        <div id="spinner" class="preloader-wrapper active" 
+             style="display:none;position:absolute;top:45%;left:50%">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div id="mainContent" style="height:100%">
+            @RenderBody()
+        </div>
+    </main>
+
+    <script src="~/js/jquery-1.11.3.min.js"></script>
+    <script src="~/js/materialize.js"></script>
+    @*<script src="~/js/materialize.min.js"></script>*@
+    <script src="~/js/wow.min.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/additional-methods.min.js"></script>
+    <script src="~/js/globalize.min.js"></script>
+    <script src="~/js/dx.chartjs.js"></script>
+    <script src="~/js/CustomScript.js"></script>
+
+    <script>
+    //session end
+        var sessionTimeoutWarning = @Session.Timeout- 1;
+
+        var sTimeout = parseInt(sessionTimeoutWarning) * 60 * 1000;
+        setTimeout('SessionEnd()', sTimeout);
+
+        function SessionEnd() {
+            $.ajax({
+                url: '/Home/Index',
+                type: "POST",
+                dataType: "html",
+                success: function (msg) {
+                    $('#mainContent').empty();
+                    $('#mainContent').html(msg);
+                    $('.carousel').carousel();
+                    window.setInterval(function () { $('.carousel').carousel('next') }, 2000);
+                    $('.tooltipped').tooltip({ delay: 50 });
+                    $('#GenNav').empty();
+                    $('#GenNav').append(
+                            `<li><a id="navAbout">About</a></li>
+                            <li><a id="navLogin">Login</a></li>`
+                        );
+                }
+            });
+            //window.location = "/Home/Index";
+    }
+    </script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["Id"];
+    TempData.Keep("Id");
+    var application = WhoIsWhereLists.GetNewApplicants().Where(x => x.Id == stud.id).First(); //(NewApplication)TempData["app"];
+    var photopath = "/Photo/" + application.Id + " " + application.Name + ".jpg";
+
+    <div class="container" style="width:95%">
+        <div class="row">
+            <div class="col m9">
+                <div id="ApplicantsBoardspinner" style="margin-top:15%; text-align:center;display:none">
+                    <img src="~/Images/spinners.gif" />
+                </div>
+                <div id="ApplicantsBoard">
+                    <br />
+                    <b>Date: <u>@application.Date.ToShortDateString()</u></b>
+                    <br />
+                    To
+                    <br />
+                    The Board of Partners
+                    <br />
+                    BB Saha &amp; Haque
+                    <br />
+                    Chartered Accountants
+                    <br />
+                    22, Dilkusha C/A
+                    <br />
+                    Dhaka - 1000.
+                    <br /><br />
+                    <div>Subject: <b><u>@application.AppSubject</u></b></div>
+                    <br />
+                    Sir,
+                    <br />
+                    <div>
+                        @{
+                            var objlines = application.AppBody.Split(new char[] { '\n' });
+                            var objcount = 0;
+                            foreach (var objline in objlines)
+                            {
+                                if (objcount == 0)
+                                {
+                                    <p>@objline</p>
+                                }
+                                else
+                                {
+                                    if (objline != string.Empty)
+                                    {
+                                        <p>@objline</p>
+                                    }
+                                }
+                                objcount++;
+                            }
+                        }
+                    </div>
+                    <br />
+                    Thanking You,
+                    <br />
+                    Sincerely Yours,
+                    <br /><br />
+                    <div><b>@application.Name</b></div>
+
+                    <br /><br />
+                </div>
+            </div>
+            <div class="col m3">
+                <div class="container" style="width:95%">
+                    <br />
+                    <div class="valign right">
+                        <img src="@photopath" height="120" width="120" />
+                        @*<button style="margin-top:5px" id="btnAcceptApplicant" class="btn waves-effect" value="@application.Id">Accept</button>
+                            <button style="margin-top:5px" id="btnRejectApplicant" class="btn waves-effect" value="@application.Id">Reject</button>
+                            <button style="margin-top:5px" name="SeeStudentCV" data-val="@application.Id" class="btn waves-effect">View CV</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fixed-action-btn" style="bottom: 45px; right: 50px;">
+            <a class="btn-floating btn-large orange darken-4" id="ApplicantId" data-val ="@application.Id">
+                <span class="fa fa-hand-o-up"></span>
+            </a>
+            <ul>
+                <li>
+                    <a class="btn-floating green tooltipped"
+                       id="btnAcceptApplicant" value="@application.Id"
+                       data-position="left"
+                       data-delay="50"
+                       data-tooltip="Accept Applicant">
+                       <span class="fa fa-thumbs-up"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="btn-floating red tooltipped"
+                       id="btnConsirmRejection" value="@application.Id"
+                       data-position="left"
+                       data-delay="50"
+                       data-tooltip="Reject Applicant">
+                       <span class="fa fa-thumbs-down"></span>
+                    </a>
+                </li>
+                <li>
+                    <a class="btn-floating orange tooltipped"
+                       name="SeeStudentCV" data-val="@application.Id"
+                       data-position="left"
+                       data-delay="50"
+                       data-tooltip="View Applicant's CV">
+                       <span class="fa fa-binoculars"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="modal" id="ConfirmRejectionModal">
+        <div class="modal-content">
+            <h4>Confirm Rejection</h4>
+            <div class="divider orange darken-4" />
+            <p>Are you sure to reject the Applicant?</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn waves-effect modal-action red" id="btnRejectApplicant" value="@application.Id">Yes</button>
+            <button class="btn waves-effect modal-action green" id="btnDoNotReject" style="margin-right:10px">No</button>
+        </div>
+    </div>
+}

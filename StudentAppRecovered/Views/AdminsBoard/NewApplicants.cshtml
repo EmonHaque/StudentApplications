@@ -1,0 +1,139 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    List<NewApplication> apps = WhoIsWhereLists.GetNewApplicants();
+    int jobStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Job").Select(x => x.Id).First();
+    int stuStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Articleship").Select(x => x.Id).First();
+    var jobapplicants = apps.Where(x => x.StatusId == jobStat);
+    var articleapplicants = apps.Where(x => x.StatusId == stuStat);
+    TempData["JobApplicants"] = jobapplicants.ToList();
+    TempData["ArtApplicants"] = articleapplicants.ToList();
+
+    int jobCount, artCount; jobCount = artCount = 0;
+    jobCount = jobapplicants.Count();
+    artCount = articleapplicants.Count();
+    if (jobCount > 5) { jobapplicants = jobapplicants.Take(5); }
+    if (artCount > 5) { articleapplicants = articleapplicants.Take(5); }
+}
+
+<div class="row">
+    <div class="col m6">
+        @if (articleapplicants.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Applicant for Articleship</b><span class="new badge orange darken-4" style="margin-right:5px">@artCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="studentDiv">
+                            @foreach (var student in articleapplicants)
+                            {
+                                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg"; <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeApplication" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                                    <div>Applied on @student.Date.ToShortDateString()</div>
+                                    <div>@student.AppSubject</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (artCount > 5)
+                        {
+                            <div id="studentBtns">
+                                <div class="row">
+                                    <button name="AdmLoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="student"
+                                            data-info="applicant"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (jobCount >= 10)
+                                    {
+                                        <button name="AdmLoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="student"
+                                                data-info="applicant"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col m6">
+        @if (jobapplicants.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Applicant for Job</b><span class="new badge orange darken-4" style="margin-right:5px">@jobCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="jobDiv">
+                            @foreach (var student in jobapplicants)
+                            {
+                                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg"; <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeApplication" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                                    <div>Applied on @student.Date.ToLongDateString()</div>
+                                    <div>@student.AppSubject</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (jobCount > 5)
+                        {
+                            <div id="jobBtns">
+                                <div class="row">
+                                    <button name="AdmLoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="job"
+                                            data-info="applicant"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (jobCount >= 10)
+                                    {
+                                        <button name="AdmLoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="job"
+                                                data-info="applicant"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+

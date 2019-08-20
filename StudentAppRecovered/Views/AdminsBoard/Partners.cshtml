@@ -1,0 +1,52 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var partners = WhoIsWhereLists.Partners;
+    var articledId = Lists4CV.Status.Where(x => x.Name == "Articled").First().Id;
+    var apprenticeId = Lists4CV.Status.Where(x => x.Name == "Apprentice").First().Id;
+    var appliedId = Lists4CV.Status.Where(x => x.Name == "Applied for Registration").First().Id;
+}
+
+@if (partners.Count() > 0)
+    {
+        <div class="row">
+            <div class="card">
+                <div class="card-content">
+                    <div><b>Partners</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@partners.Count()</span></div>
+                    <div class="divider orange darken-4" style="margin-bottom:5px" />
+                    <div class="row">
+                        @foreach (var student in partners)
+                        {
+                            var partner = partners.Where(x => x.Id == student.Id).First();
+                            var partnerDetail = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == partner.Id).First();
+                            var staffs = WhoIsWhereLists.HRSupervisor.Where(x => x.PartnerId == partner.Id && x.To.Year == 1905);
+                            var noOfStudent =  staffs.Where(x => x.StatusId == articledId || x.StatusId == apprenticeId || x.StatusId == appliedId).Count();
+                            var noOfEmployee = staffs.Count() - noOfStudent;
+                            var studName = partner.Name;
+                            var photopath = "/Photo/" + student.Id + " " + studName + ".jpg";
+                            string joinedon = "";
+                            if(partnerDetail.JoinedOn.Year == 1905)
+                            {
+                                joinedon = "Joining Date has not yet been updated";
+                            }
+                            else
+                            {
+                                joinedon = "Joined on " + partnerDetail.JoinedOn.ToShortDateString();
+                            }
+                            <div class="col m6">
+                                <div class="row" style="margin-bottom:2px">
+                                    <div class="col m2">
+                                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                    </div>
+                                    <div class="col m10">
+                                        <a name="SeeStudentDetail2" data-val="@student.Id"><b><u>@studName</u></b></a>
+                                        <div>@joinedon</div>
+                                        <div>Trains @noOfStudent of students and supervises @noOfEmployee employees</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }

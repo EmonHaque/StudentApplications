@@ -1,0 +1,69 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+    var students = (IEnumerable<Student4WhoWhere>)TempData["ManagableStudents"];
+    var apps = (IEnumerable<RegularApplication>)TempData["StudentAppRecovereds1"];
+    var myApps = (IEnumerable<RegularApplication>)TempData["MyAppications"];
+    var newApps = apps.Where(x => !x.ManagerReview).Count();
+    TempData.Keep();
+}
+
+@{
+    <div class="nav-wrapper">
+        <ul class="side-nav fixed leftside-navigation">
+            <li><a id="YourStudents">Students<span class="badge">@students.Count()</span></a></li>
+            <li><a id="YourStudentsApps">Applications<span class="new badge">@newApps</span></a></li>
+            <li><a id="SubmitApplication2">Apply</a></li>
+            <li><a id="Applied2">Applied <span class="badge">@myApps.Count()</span></a></li>
+            <li><a id="refreshManagersBoard">Reload <span class="badge fa fa-refresh green-text"></span></a></li>
+        </ul>
+    </div>
+
+    <div style="padding-left: 310px; margin-right:10px">
+        <div id="Managerspinner" class="preloader-wrapper active"
+             style="display:none;position:absolute;top:45%;left:60%">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+       
+        <div class="adjustheight" id="ManagersBoardContent" >
+            <div class="row">
+                <div class="col m4" id="StaffsChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Student you Supervise</div>
+                            <div class="divider orange darken-3" />
+                            <div id="StaffsChart" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col m4" id="ApplicationChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Application</div>
+                            <div class="divider orange darken-3" />
+                            <div id="ApplicationChart" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col m4" id="DecisionChartDiv" style="display:none">
+                    <div class="card">
+                        <div class="card-content">
+                            <div>Decision on Application</div>
+                            <div class="divider orange darken-3" />
+                            <div id="DecisionChart" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

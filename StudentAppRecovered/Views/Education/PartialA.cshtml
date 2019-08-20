@@ -1,0 +1,85 @@
+﻿@using StudentAppRecovered.Helper
+<div class="card wow bounceInDown">
+    <div class="card-title orange lighten-3">
+        <div class="header2 white-text" style="margin:0 10px"><b>A Level</b></div>
+    </div>
+    <div class="card-content">
+        <form id="AForm">
+            <div class="row">
+                <div class="input-field col s8">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <input id="AInstitute" name="txtInstitute" type="text">
+                    <label for="txtInstitute">Institute*</label>
+                </div>
+                <div class="input-field col s4">
+                    <span class="fa fa-bold orange-text text-darken-3 prefix" />
+                    <select id="ABoard" name="ddlABoard">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in Lists4CV.BoardUniversity.Where(x => x.Level == "OA"))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <label for="ddlBoard">Board*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s4">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input id="AYearOfPass" name="txtYearOfPass" type="text">
+                    <label for="txtYearOfPass">Year of pass*</label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="subject">
+                    <div><b>Subjects</b></div>
+                    <div class="divider orange darken-4" />
+                    <div title="ASubjects">
+                        <div class="input-field col s9">
+                            <label for="txtSubject">Subject name*</label>
+                            <input title="ASubject" name="txtASubject[1]" type="text">
+                        </div>
+                        <div class="input-field col s3">
+                            <label for="txtGrade">Grade*</label>
+                            <input title="AGrade" name="txtAGrade[1]" type="text">
+                        </div>
+                    </div>
+                    <div title="ASubjects">
+                        <div class="input-field col s9">
+                            <label for="txtSubject">Subject name*</label>
+                            <input title="ASubject" name="txtASubject[2]" type="text">
+                        </div>
+                        <div class="input-field col s3">
+                            <label for="txtGrade">Grade*</label>
+                            <input title="AGrade" name="txtAGrade[2]" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col m6">
+                <button id="btnAddASubject"
+                        class="btn-floating btn-large orange darken-3 waves-effect left tooltipped"
+                        style="margin-right:5px"
+                        data-position="right"
+                        data-delay="50"
+                        data-tooltip="Add one more subject">
+                    <span class="fa fa-plus-circle"></span>
+                </button>
+            </div>
+            <div class="col m6">
+                <button id="btnRemoveASubject"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Remove last subject">
+                    <span class="fa fa-minus-circle"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>

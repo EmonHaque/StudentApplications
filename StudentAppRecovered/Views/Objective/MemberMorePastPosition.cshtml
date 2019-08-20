@@ -1,0 +1,33 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var stud = (StudentId)TempData["Id"];
+    var formid = "PastPosition" + stud.id;
+}
+<form id="@formid">
+    <div class="card" title="PartnerPastPosition">
+        <div class="card-content">
+            <div class="input-field">
+                <span class="fa fa-shield orange-text text-darken-3 prefix" />
+                <input title="PastPosition" name="txtPastPosition" type="text" maxlength="50">
+                <label for="txtPastPosition">Position*</label>
+            </div>
+            <div class="input-field">
+                <span class="fa fa-bank orange-text text-darken-3 prefix" />
+                <input title="PastOrganisation" name="txtPastOrganisation" type="text" maxlength="30">
+                <label for="txtPastOrganisation">Organisation*</label>
+            </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input title="PastPositionFrom" name="txtPastPositionFrom" type="text" class="datepicker">
+                    <label for="txtPastPositionFrom">from*</label>
+                </div>
+                <div class="input-field col s6">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input title="PastPositionTo" name="txtPastPositionTo" type="text" class="datepicker">
+                    <label for="txtPastPositionTo">to*</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

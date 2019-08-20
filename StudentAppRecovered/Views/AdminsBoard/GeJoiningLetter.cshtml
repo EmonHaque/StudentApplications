@@ -1,0 +1,114 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["Id"];
+    var letter = Employee.JoiningLetters().Where(x => x.Id == stud.id).First(); //(JoiningLetter)TempData["Letter"];
+    var students = WhoIsWhereLists.Students4WhoIsWhere; //(IEnumerable<Student4WhoWhere>)TempData["Students"];
+    TempData.Keep();
+    var studName = students.Where(x => x.Id == letter.Id).Select(x => x.Name).First();
+    var principal = students.Where(x => x.Id == letter.PartnerId).Select(x => x.Name).First();
+    var photopath = "/Photo/" + letter.Id + " " + studName + ".jpg";
+
+    <div class="container" style="width:95%">
+        <div class="row">
+            <div class="col m9">
+                <div id="ApplicantsBoardspinner" style="margin-top:15%; text-align:center;display:none">
+                    <img src="~/Images/spinners.gif" />
+                </div>
+                <div id="ApplicantsBoard">
+                    <br />
+                    <b>Date: <u>@letter.Date.ToShortDateString()</u></b>
+                    <br />
+                    To
+                    <br />
+                    @principal
+                    <br />
+                    Principal
+                    <br />
+                    BB Saha &amp; Haque
+                    <br />
+                    Chartered Accountants
+                    <br />
+                    22, Dilkusha C/A
+                    <br />
+                    Dhaka - 1000.
+                    <br /><br />
+                    <div>Subject: <b><u>@letter.AppSubject</u></b></div>
+                    <br />
+                    Sir,
+                    <br />
+                    <div>
+                        @{
+                            var objlines = letter.AppBody.Split(new char[] { '\n' });
+                            var objcount = 0;
+                            foreach (var objline in objlines)
+                            {
+                                if (objcount == 0)
+                                {
+                                    <p>@objline</p>
+                                }
+                                else
+                                {
+                                    if (objline != string.Empty)
+                                    {
+                                        <div>@objline</div>
+                                    }
+                                    else { <br />}
+                                }
+                                objcount++;
+                            }
+                        }
+                    </div>
+                    <br />
+                    Thanking You,
+                    <br />
+                    Sincerely Yours,
+                    <br /><br />
+                    <div><b>@studName</b></div>
+
+                    <br /><br />
+                </div>
+            </div>
+            <div class="col m3">
+                <div class="container" style="width:95%">
+                    <br />
+                    <div class="valign right">
+                        <img src="@photopath" height="120" width="120" />
+                    </div>
+                </div>
+
+                <div class="fixed-action-btn">
+                    <a class="btn-floating btn-large orange darken-4" id="ApplicantId" data-val="@letter.Id">
+                        <span class="fa fa-hand-o-up"></span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a class="btn-floating green tooltipped"
+                               name="UpdateInformation" data-val="@letter.Id"
+                               data-position="left"
+                               data-delay="50"
+                               data-tooltip="Accept Joining Letter">
+                                <span class="fa fa-thumbs-up"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="btn-floating orange darken-2 tooltipped"
+                               name="SeeStudentCV" data-val="@letter.Id"
+                               data-position="left"
+                               data-delay="50"
+                               data-tooltip="View CV">
+                               <span class="fa fa-binoculars"></span>
+                            </a>
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col m9">
+                    <div id="errorMsg"/>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

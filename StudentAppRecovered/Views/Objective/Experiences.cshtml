@@ -1,0 +1,70 @@
+﻿
+<div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+    <div class="card-title orange darken-3">
+        <div class="header2 white-text" style="margin:0 10px"><b>Past Experience</b></div>
+    </div>
+    <div class="card-content">
+        <div id="ExperienceForm">
+            <form id="Experience1">
+                <div class="card" title="Experience">
+                    <div class="card-content">
+                        <div class="input-field">
+                            <span class="fa fa-shield orange-text text-darken-3 prefix" />
+                            <input title="Position" name="txtPosition" type="text" maxlength="50">
+                            <label for="txtPosition">Position*</label>
+                        </div>
+                        <div class="input-field">
+                            <span class="fa fa-bank orange-text text-darken-3 prefix" />
+                            <input title="Organisation" name="txtOrganisation" type="text" maxlength="30">
+                            <label for="txtOrganisation">Organisation*</label>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                                <input title="ExperienceFrom" name="txtExperienceFrom" type="text" class="datepicker">
+                                <label for="txtExperienceFrom">from*</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                                <input title="ExperienceTo" name="txtExperienceTo" type="text" class="datepicker">
+                                <label for="txtExperienceTo">to*</label>
+                            </div>
+                        </div>
+                        <div class="input-field">
+                            <span class="fa fa-bars orange-text text-darken-3 prefix" />
+                            <textarea title="Responsibilities" name="txtResponsibilities" class="materialize-textarea"></textarea>
+                            <label for="txtResponsibilities">Responsibilities *</label>
+                        </div>
+                    </div>
+                 
+                </div>
+            </form>
+        </div>
+    
+        <div class="row">
+            <div class="col m6">
+                <button id="btnAddMoreExperience"
+                        class="btn-floating btn-large orange darken-3 waves-effect left tooltipped"
+                        style="margin-right:5px"
+                        data-position="right"
+                        data-delay="50"
+                        data-tooltip="Add one more experience">
+                    <span class="fa fa-plus-circle"></span>
+                </button>
+            </div>
+            <div class="col m6">
+                <button id="btnRemoveExperience"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Remove last experience">
+                    <span class="fa fa-minus-circle"></span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+

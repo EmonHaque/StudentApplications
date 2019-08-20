@@ -1,0 +1,170 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var application = (RegularApplication)TempData["ReviewingApp"];
+    var info = (ApplicationReading)TempData["AppReadingInfo"];
+    TempData.Keep();
+    var applicantName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == application.Id).First().Name;
+    var partnerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == application.PartnerId).First().Name;
+    string managerName = string.Empty;
+
+    if(WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == application.ManagerId).Count() > 0)
+    {
+        managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == application.ManagerId).First().Name;
+    }
+    var appSubject = WhoIsWhereLists.Applications.Where(x => x.Id == application.AppTypeId).First().Type;
+}
+<div class="row">
+    <div class="col m8">
+        <div class="card">
+            <div class="card-content">
+
+                <button id="YourStudentsApps2" value="Back" data-val="@info.PageNo"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Back to previous page">
+                    <span class="fa fa-arrow-circle-left"></span>
+                </button>
+
+                <b>@application.Date.ToLongDateString()</b><br /><br />
+                To<br />
+                @partnerName <br />
+                Principal<br />
+                BB Saha &amp; Haque <br />
+                Chartered Accountants <br />
+                22, Dilkusha C/A <br />
+                Dhaka - 1000. <br /><br />
+                Subject: <b><u>@appSubject</u></b>
+                <br /><br />
+                Sir, <br />
+
+                @{
+                    var objlines = application.AppBody.Split(new char[] { '\n' });
+                    var objcount = 0;
+                    var stuphotopath = "/Photo/" + application.Id + " " + applicantName + ".jpg";
+
+                    foreach (var objline in objlines)
+                    {
+                        if (objcount == 0)
+                        {
+                            <p>@objline</p>
+                        }
+                        else
+                        {
+                            if (objline != string.Empty)
+                            {
+                                <p>@objline</p>
+                            }
+                            else { <br />}
+                        }
+                        objcount++;
+                    }
+                }
+                <br /><br />
+                Thanking You,
+                <br />
+                Sincerely Yours,<br /><br />
+                @applicantName<br /><br />
+                <div>
+                    <img src="@stuphotopath" style="height:150px; width:150px" class="responsive-img" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col m4">
+        <div class="row">
+            @if (application.PartnerNote == string.Empty)
+            {
+                <div class="card">
+                    <div class="card-content">
+                        <h5>Decide and make a note</h5>
+                        <form id="PartnerNoteForm">
+                            <div id="reqMsg" class="row">
+                                <div class="input-field col s6">
+                                    <input type="radio" id="Accepted" value="Accepted" name="AppAcceptance" />
+                                    <label for="Accepted">Accepted</label>
+                                </div>
+                                <div class="input-field col s6">
+                                    <input type="radio" id="Rejected" value="Rejected" name="AppAcceptance" />
+                                    <label for="Rejected">Rejected</label>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <textarea id="ManagerNote" name="txtManagerNote" class="materialize-textarea"></textarea>
+                                    <label for="txtManagerNote">Write here *</label>
+                                </div>
+                            </div>                   
+                        </form>
+                        <div class="row">
+                            <button id="SubmitManagerNote2" value="@application.Sl"
+                                    class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                                    data-position="left"
+                                    data-delay="50"
+                                    data-tooltip="Post your Note">
+                                <span class="fa fa-arrow-circle-right"></span>
+                            </button>
+                        </div>
+                        @*<button class="btn waves-effect" id="SubmitManagerNote2" value="@application.Sl">Submit</button>*@
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card-panel">
+                    <b><u>Your Note</u></b>
+                    <div><p>@application.PartnerNote</p></div>               
+                    <div class="card">
+                        <div class="card-content">                       
+                            @if (Convert.ToBoolean(application.Accepted))
+                            {
+                                <p><b>Decision:</b> Positive</p>
+                            }
+                            else
+                            {
+                                <p><b>Decision:</b> Negative</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @if (managerName != string.Empty)
+        {
+            var photopath = "/Photo/" + application.ManagerId + " " + managerName + ".jpg";
+            if (application.ManagerNote != string.Empty)
+            {
+                <div class="row">
+                    <div class="card-panel">
+                        <div>
+                            <div>
+                                <img src="@photopath" style="height:100px; width:100px" class="responsive-img circle" />
+                            </div>
+                            <b><u>@managerName's Note</u></b>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-content">
+                                <p>@application.ManagerNote</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="card-panel">
+                        <div>
+                            <div>
+                                <img src="@photopath" style="height:100px; width:100px" class="responsive-img circle" />
+                            </div>
+                            <b><u>@managerName</u></b> has not yet made any note on it.
+                        </div>
+                    </div>
+                </div>
+            }
+        }     
+    </div>    
+</div>

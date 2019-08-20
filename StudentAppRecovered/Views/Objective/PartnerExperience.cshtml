@@ -1,0 +1,104 @@
+﻿@using StudentAppRecovered.Helper
+
+<div class="row">
+    <div class="col m9">
+        <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+            <div class="card-title orange darken-3">
+                <div class="header2 white-text" style="margin:0 10px"><b>Membership</b></div>
+            </div>
+            <div class="card-content">
+                <div class="row">
+                    <button id="AddMemberOrganisation"
+                            class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                            style="margin-right:5px"
+                            data-position="left"
+                            data-delay="50"
+                            data-tooltip="Organisation is not in List?">
+                        <span class="fa fa-plus-circle"></span>
+                    </button>
+                </div>
+                <div id="PartnerMemberShipForm">
+                    <form id="Membership1">
+                        <div class="card" title="Membership">
+                            <div class="card-content">
+                                <div class="input-field">
+                                    <span class="fa fa-info-circle orange-text text-darken-3 prefix" />
+                                    <input title="MembershipId" name="txtMembershipId" type="text" maxlength="50">
+                                    <label for="txtMembershipId">Membership Id*</label>
+                                </div>
+                                <div class="input-field">
+                                    <span class="fa fa-institution orange-text text-darken-3 prefix" />
+                                    <select id="Memddl1" title="MebersOrg" name="ddlMebersOrg1">
+                                        <option value="" disabled selected>Choose</option>
+                                        @foreach (var item in Lists4CV.MemberOf)
+                                        {
+                                            <option value="@item.Id">@item.Organisation</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col m6">
+                        <button id="btnAddMoreMembership"
+                                class="btn-floating btn-large orange darken-3 waves-effect left tooltipped"
+                                style="margin-right:5px"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Add one more membership">
+                            <span class="fa fa-plus-circle"></span>
+                        </button>
+                    </div>
+                    <div class="col m6">
+                        <button id="btnRemoveLastMembership"
+                                class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="Remove last membership">
+                            <span class="fa fa-minus-circle"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col m3">
+        <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+            <div class="card-content">
+                <div class="row">
+                    <div class="input-field">
+                        <input type="checkbox" id="memCurrentPosition" value="CurrentPosition" name="memCurPos" />
+                        <label for="memCurrentPosition">Current position(s)</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="checkbox" id="memPastPosition" value="PastPosition" name="memPasPos" />
+                        <label for="memPastPosition">Past position(s)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="MemberPosition">
+        <div class="col m6"><div id="CurrentPositionDiv" /></div>
+        <div class="col m6"><div id="PastPositionDiv" /></div>
+    </div>
+</div>
+
+
+<form id="MembersOrgAdd">
+    <div class="modal" id="MembersOrgAddModal">
+        <div class="modal-content">
+            <div class="input-field">
+                <label for="txtMembersOrgName">Name of Organisation*</label>
+                <input id="MembersOrgName" name="txtMembersOrgName" type="text">
+            </div>
+            <div id="txtMembersOrgNamemsg" />
+        </div>
+        <div class="modal-footer">
+            <a id="ClosetxtMembersOrgAdd" class="waves-effect waves-green btn btn-flat">Cancel</a>
+            <a id="AddtxtMembersOrgNameToList" class="waves-effect waves-green btn btn-flat">Add to list</a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,105 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var id = Lists4CV.Education.Where(x => x.Level == "Bachelor").Select(x => x.Id).First();
+    var titles = Lists4CV.EducationTitle.Where(x => x.Id == id);
+    var universities = Lists4CV.BoardUniversity.Where(x => x.Level == "University");
+}
+<form id="BachelorForm" class="wow bounceInDown">
+    <div class="card">
+        <div class="card-title orange lighten-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>Bachelor</b></div>
+        </div>
+        <div class="card-content">
+            <div class="row">
+                <div class="input-field col s6">
+                    <span class="fa fa-flag orange-text text-darken-3 prefix" />
+                    <select id="BachelorType" name="BachelorddlType">
+                        <option value="" disabled selected>Choose</option>
+                        <option>Regular</option>
+                        <option>Professional</option>
+                        <option>Private</option>
+                    </select>
+                    <label for="ddlType">Type*</label>
+                </div>
+                <div class="input-field col s6">
+                    <span class="fa fa-graduation-cap orange-text text-darken-3 prefix" />
+                    <select id="BachelorTitle" name="BachelorddlTitle">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in titles)
+                        {
+                            <option value="@item.TitleId">@item.Title</option>
+                        }
+                    </select>
+                    <label for="ddlTitle">Title*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s10">
+                    <span class="fa fa-industry orange-text text-darken-3 prefix" />
+                    <input id="BachelorMajor" name="txtMajor" type="text">
+                    <label for="txtMajor">Major</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s5">
+                    <span class="fa fa-calendar orange-text text-darken-3 prefix" />
+                    <input id="BachelorYearOfPass" name="txtYearOfPass" type="text">
+                    <label for="txtYearOfPass">Year of pass*</label>
+                </div>
+                <div class="input-field col s5">
+                    <span class="fa fa-star orange-text text-darken-3 prefix" />
+                    <input id="BachelorCGPA" name="txtCGPA" type="text">
+                    <label for="txtCGPA">CGPA/Class*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m10">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <input id="BachelorInstitute" name="txtInstitute" type="text">
+                    <label for="txtInstitute">Institute*</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col m10">
+                    <span class="fa fa-university orange-text text-darken-3 prefix" />
+                    <select id="BachelorUniversity" name="ddlBachelorUni">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in universities)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                    <label for="ddlBachelorUni">University*</label>
+                </div>
+                <div class="col m2">
+                    <a id="AddBachelorUniversity"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        style="margin-top:15px"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Not in List?">
+                        <span class="fa fa-plus-circle"></span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</form>
+
+<form id="BachelorUniAdd">
+    <div class="modal" id="BachelorUniModal">
+        <div class="modal-content">
+
+            <div class="input-field">
+                <label for="txtBachelorUniversityName">Name of your University*</label>
+                <input id="BachelorUniversityName" name="txtBachelorUniversityName" type="text">
+            </div>
+            <div id="bacheloruniaddmsg" />
+        </div>
+        <div class="modal-footer">
+            <a id="CloseBachelorUniAdd" class="waves-effect waves-green btn btn-flat">Cancel</a>
+            <a id="AddBachelorUniToList" class="waves-effect waves-green btn btn-flat">Add to list</a>
+        </div>
+    </div>
+</form>

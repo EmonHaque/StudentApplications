@@ -1,0 +1,151 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var info = (AppInfo)TempData["AppInfo"];
+    var applications = Employee.AllApplications(info.Id);
+    var partnerId4Joining = Employee.SupervisingHistory(info.Id).OrderBy(x => x.From).First().PartnerId;
+    var student = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == info.Id).First();
+
+    string appdate = null;
+    string addressee = null;
+    string appSubject = null;
+    string appBody = null;
+    bool? accepted = null;
+    if (info.Info == "First")
+    {
+        appdate = applications.FirstApplication.Date.ToLongDateString();
+        addressee = "The Board of Partners";
+        appSubject = applications.FirstApplication.AppSubject;
+        appBody = applications.FirstApplication.AppBody;
+    }
+    else if (info.Info == "Joining")
+    {
+        appdate = applications.Joining.Date.ToLongDateString();
+        appSubject = applications.Joining.AppSubject;
+        appBody = applications.Joining.AppBody;
+        addressee = "Principal";
+    }
+    else
+    {
+        var app = applications.Applications.Where(x => x.Sl == Convert.ToInt32(info.Info)).First();
+        appdate = app.Date.ToLongDateString();
+        appSubject = WhoIsWhereLists.Applications.Where(x => x.Id == app.AppTypeId).First().Type;
+        appBody = app.AppBody;
+        addressee = "Principal";
+        accepted = app.Accepted;
+    }
+}
+<div class="card wow bounceInDown flipInY">
+    <div class="card-content">
+        <div class="row">
+            <div class="card-title">
+                <button style="margin:10px"
+                        id="CloseAppDiv"
+                        class="btn-floating orange darken-4 right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Click to Close">
+                    <span class="fa fa-remove"></span>
+                </button>
+                @if (info.Info != "Joining" && info.Info != "First")
+                {
+                    if (accepted == null)
+                    {
+                        <button style="margin:10px"
+                                class="btn-floating btn-large orange darken-1 left tooltipped"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Decision is pending on this Application">
+                            <span class="fa fa-question"></span>
+                        </button>
+                    }
+                    else
+                    {
+                        if (Convert.ToBoolean(accepted))
+                        {
+                            <button style="margin:10px"
+                                    class="btn-floating btn-large orange darken-1 left tooltipped"
+                                    data-position="right"
+                                    data-delay="50"
+                                    data-tooltip="Decision was affirmative">
+                                <span class="fa fa-check"></span>
+                            </button>
+                        }
+                        else
+                        {
+                            <button style="margin:10px"
+                                    class="btn-floating btn-large orange darken-1 left tooltipped"
+                                    data-position="right"
+                                    data-delay="50"
+                                    data-tooltip="Decision was negative">
+                                <span class="fa fa-exclamation"></span>
+                            </button>
+                        }
+                    }
+                }
+
+            </div>
+        </div>
+        <div class="row">
+            <br />
+            <b>Date: <u>@appdate</u></b>
+            <br />
+            To
+            <br />
+            @if (info.Info == "Joining")
+            {
+                <div>@WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == partnerId4Joining).First().Name</div>
+            }
+            @if (info.Info != "Joining" && info.Info != "First")
+            {
+                var partnerId = applications.Applications.Where(x => x.Sl == Convert.ToInt32(info.Info)).First().PartnerId;
+                <div>@WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == partnerId).First().Name</div>
+            }
+            @addressee
+            <br />
+            BB Saha &amp; Haque
+            <br />
+            Chartered Accountants
+            <br />
+            22, Dilkusha C/A
+            <br />
+            Dhaka - 1000.
+            <br /><br />
+            <div>Subject: <b><u>@appSubject</u></b></div>
+            <br />
+            Sir,
+            <br />
+            <div>
+                @{
+                    var objlines = appBody.Split(new char[] { '\n' });
+                    var objcount = 0;
+                    foreach (var objline in objlines)
+                    {
+                        if (objcount == 0)
+                        {
+                            <p>@objline</p>
+                        }
+                        else
+                        {
+                            if (objline != string.Empty)
+                            {
+                                <div>@objline</div>
+                            }
+                            else
+                            {
+                                <br />
+                            }
+                        }
+                        objcount++;
+                    }
+                }
+            </div>
+            <br />
+            Thanking You,
+            <br />
+            Sincerely Yours,
+            <br /><br />
+            <div><b>@student.Name</b></div>
+        </div>
+    </div>
+</div>
+

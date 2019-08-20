@@ -1,0 +1,130 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["Id"];
+    TempData.Keep("Id");
+    var status = Lists4CV.Status;
+    var departments = Lists4CV.Department;
+    var deptstatmap = Lists4CV.DeptStatusMap;
+    var partners = WhoIsWhereLists.Partners;
+    var app = WhoIsWhereLists.GetNewApplicants().Where(x => x.Id == stud.id).First();
+    int stuStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Articleship").Select(x => x.Id).First();
+    var empORStu = "";
+}
+<div class="container" style="margin-top:50px; width:95%">
+    <div class="row">
+        <div class="col s3">
+            <img id="partnerImage" src="" height="150" width="150" class="responsive-img circle" />
+        </div>
+        <div class="col s3 offset-s6">
+            <img id="managerImage" src="" height="150" width="150" class="responsive-img circle" />
+        </div>
+    </div>
+    <div id="NewApplicantJoining">
+
+        @if (app.StatusId == stuStat)
+        {
+            empORStu = "Student";
+            <form id="StudentJoiningForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+                        <select id="SelectPartner" name="ddlSelectPartner">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in partners)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                        <label for="ddlSelectPartner">Select partner*</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+                        <select id="SelectManager" name="ddlSelectManager">
+                            <option value="" disabled selected>Choose</option>
+                        </select>
+                        <label for="ddlSelectManager">Select manager*</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+                        <input title="InitUserName" name="txtInitUserName" type="text">
+                        <label for="txtInitUserName">Username*</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <span class="fa fa-eye orange-text text-darken-4 prefix"></span>
+                        <input title="InitPassword" name="txtInitPassword" type="password">
+                        <label for="txtInitPassword">Password*</label>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            empORStu = "Employee";
+            <form id="EmployeeJoiningForm">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+                        <select id="SelectPartner" name="ddlSelectPartner">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in partners)
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                        <label for="ddlSelectPartner">Select partner*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-group orange-text text-darken-4 prefix"></span>
+                        <select id="SelectDepartment" name="ddlSelectDepartment">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var item in departments)
+                            {
+                                <option value="@item.Id"> @item.Name</option>
+                            }
+                        </select>
+                        <label for="ddlSelectDepartment">Select department*</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <span class="fa fa-flag orange-text text-darken-4 prefix"></span>
+                        <select id="SelectPosition" name="ddlSelectPosition">
+                            <option value="" disabled selected>Choose</option>
+                        </select>
+                        <label for="ddlSelectPosition">Select position*</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-user orange-text text-darken-4 prefix"></span>
+                        <input title="InitUserName" name="txtInitUserName" type="text">
+                        <label for="txtInitUserName">Username*</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <span class="fa fa-eye orange-text text-darken-4 prefix"></span>
+                        <input title="InitPassword" name="txtInitPassword" type="password">
+                        <label for="txtInitPassword">Password*</label>
+                    </div>
+                </div>
+            </form>
+        }
+    </div>
+
+    <div id="msg4EmployeeJoin" class="red-text"/>
+    <div class="row">
+        <button id="btnJoining" value="@empORStu"
+                class="btn-floating btn-large waves-effect green right tooltipped"
+                data-position="left"
+                data-delay="50"
+                data-tooltip="Accept Applicant">
+            <span class="fa fa-check"></span>
+        </button>
+    </div>
+</div>

@@ -1,0 +1,522 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["StudentId"];
+
+    var student = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == stud.id).First();
+    var studentCV = WhoIsWhereLists.GetStudentCV(stud.id);
+    var applications = Employee.AllApplications(stud.id);
+    var supHistory = Employee.SupervisingHistory(stud.id).OrderBy(x => x.From).ToList();
+    var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+    string currentStatus, appliedFor; currentStatus = appliedFor = "";
+
+    var partnerId = Lists4CV.Status.Where(x => x.Name == "Partner").First().Id.ToString();
+    if (student.Status != partnerId)
+    {
+        currentStatus = Lists4CV.Status.Where(x => x.Id == supHistory.Where(y => y.To.Year == 1905).Select(y => y.StatusId).First()).Select(x => x.Name).First();
+        appliedFor = Lists4CV.Status.Where(x => x.Id == applications.FirstApplication.StatusId).First().Name;
+    }
+    var managerId = Lists4CV.Status.Where(x => x.Name == "Manager").First().Id.ToString();
+    var ccId = Lists4CV.Status.Where(x => x.Name == "Course Completed").First().Id.ToString();
+    var articledId = Lists4CV.Status.Where(x => x.Name == "Articled").First().Id.ToString();
+    var apprenticeId = Lists4CV.Status.Where(x => x.Name == "Apprentice").First().Id.ToString();
+    var appliedId = Lists4CV.Status.Where(x => x.Name == "Applied for Registration").First().Id.ToString();
+}
+
+<div class="row" style="width:100%">
+    <div class="col m6">
+        <div id="AllAppDiv">
+
+        </div>
+        <div id="GenInfo">
+            <div class="card">
+                <div class="card-content">
+                    <div class="row">
+                        <div class="col m4">
+                            <img src="@photopath" style="height:150px; width:150px; margin-top:5px" class="responsive-img circle" />
+                        </div>
+                        <div class="col m8">
+                            <h5>@student.Name</h5>
+                            <div>Status: @currentStatus</div>
+                            <div><span class="fa fa-phone orange-text text-darken-4" />&nbsp;&nbsp;@studentCV.ContactNo</div>
+                            @if (studentCV.Email != null)
+                            {
+                                <div><span class="fa fa-envelope orange-text text-darken-4" />&nbsp;&nbsp;@studentCV.Email</div>
+                            }
+                            @if (student.Status == articledId)
+                            {
+                                var period = WhoIsWhereLists.PeriodOfCourse.Where(x => x.Id == studentCV.Registration.Period).First().Years;
+                                <div>Registration No.: @studentCV.RegistrationNo</div>
+                                <div>Period of Articleship: @period years</div>
+                            }
+                            <div class="divider orange darken-4" />
+                            @{
+                        var lines = studentCV.PresentAddress.Split(new char[] { '\n' });
+                        var count = 0;
+                        foreach (var line in lines)
+                        {
+                            if (count == 0)
+                            {
+                                        <div>@line</div>
+                            }
+                            else
+                            {
+                                if (line != string.Empty)
+                                {
+                                            <div>@line</div>
+                                }
+                                else
+                                { <br />}
+                            }
+                            count++;
+                        }
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (student.Status != partnerId)
+                        {
+                            <button id="btnConfirmTerminate"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    style="margin-left:10px"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Want to Terminate?">
+                                <span class="fa fa-fire"></span>
+                            </button>
+
+                            <button id="btnConfirmExit"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Leaving the Firm?">
+                                <span class="fa fa-blind"></span>
+                            </button>
+
+                        }
+                        else
+                        {
+                            <button id="btnConfirmPartnerExit"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    style="margin-left:10px"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Leaving the Firm?">
+                                <span class="fa fa-blind"></span>
+                            </button>
+                        }
+
+
+                        @if (student.Status == articledId)
+                        {
+                            <button id="btnConfirmCC"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Course Completed?">
+                                <span class="fa fa-cc"></span>
+                            </button>
+                            <button id="btnTransferOne"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Want to change supervising Manager?">
+                                <span class="fa fa-cab"></span>
+                            </button>
+                        }
+                        else if (student.Status == apprenticeId)
+                        {
+                            <button id="btnApply4Reg"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Applied for Registration?">
+                                <span class="fa fa-pencil"></span>
+                            </button>
+                            <button id="btnTransferOne"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Want to change supervising Manager?">
+                                <span class="fa fa-cab"></span>
+                            </button>
+                        }
+                        else if (student.Status == appliedId)
+                        {
+                            <button id="AppliedforRegistration"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Got Registration Number?">
+                                <span class="fa fa-thumbs-up"></span>
+                            </button>
+                            <button id="btnTransferOne"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Want to change supervising Manager?">
+                                <span class="fa fa-cab"></span>
+                            </button>
+                        }
+                        else if (student.Status != partnerId)
+                        {
+                            <button id="btnPromote"
+                                    value="@student.Id"
+                                    class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                    data-position="bottom"
+                                    data-delay="50"
+                                    data-tooltip="Want to Transfer?">
+                                <span class="fa fa-wrench"></span>
+                            </button>
+                        }
+                        else
+                        {
+                            if (student.JoinedOn.Year == 1905)
+                            {
+                                <button id="btnPartnerJoiningDate"
+                                        value="@student.Id"
+                                        class="btn-floating btn-large waves-effect orange darken-3 tooltipped"
+                                        data-position="bottom"
+                                        data-delay="50"
+                                        data-tooltip="Update Joining Date">
+                                    <span class="fa fa-calendar"></span>
+                                </button>
+                                <br />
+                            }
+
+                        }
+                        <button name="SeeStudentCV"
+                                data-val="@student.Id"
+                                style="margin-right:10px"
+                                class="btn-floating btn-large waves-effect orange darken-3 right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="View CV">
+                            <span class="fa fa-binoculars"></span>
+                        </button>
+                    </div>
+
+                    @if (student.Status != partnerId)
+                    {
+                        <div class="row">
+                            <div class="container" style="width:96%">
+                                <ul class="collapsible" data-collapsible="accordion">
+                                    <li>
+                                        <div class="collapsible-header orange darken-3 white-text"><b>Job History</b></div>
+                                        <div class="collapsible-body">
+                                            <div class="collection">
+                                                <div class="collection-item">
+                                                    Applied as an @appliedFor on @applications.FirstApplication.Date.ToShortDateString()
+                                                </div>
+                                                @{
+                                                if (supHistory.Count() > 1)
+                                                {
+                                                    for (int i = 0; i < supHistory.Count(); i++)
+                                                    {
+                                                        var partnerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].PartnerId).First().Name;
+                                                        var jobStatus = Lists4CV.Status.Where(x => x.Id == supHistory[i].StatusId).First().Name;
+                                                        if (i == 0)
+                                                        {
+                                                            if (supHistory[i].ManagerId == 0)
+                                                            {
+                                            <div class="collection-item">Joined as @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString()</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                            <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[i].From.ToShortDateString() and was supervised by @managerName till @supHistory[i].To.ToShortDateString()</div>
+                                                            }
+                                                        }
+                                                        else if (i == supHistory.Count() - 1)
+                                                        {
+                                                            if (supHistory[i].ManagerId == 0)
+                                                            {
+                                            <div class="collection-item">Currently @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString()</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                            <div class="collection-item">Currently @jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() and is being supervised by @managerName</div>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            if (supHistory[i].ManagerId == 0)
+                                                            {
+                                            <div class="collection-item">@jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString()</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[i].ManagerId).First().Name;
+                                            <div class="collection-item">@jobStatus under @partnerName from @supHistory[i].From.ToShortDateString() to @supHistory[i].To.ToShortDateString() and was supervised by @managerName</div>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    var partnerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[0].PartnerId).First().Name;
+                                                    var jobStatus = Lists4CV.Status.Where(x => x.Id == supHistory[0].StatusId).First().Name;
+                                                    if (supHistory[0].ManagerId == 0)
+                                                    {
+                                            <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[0].From.ToShortDateString()</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        var managerName = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == supHistory[0].ManagerId).First().Name;
+                                            <div class="collection-item">Joined as @jobStatus under @partnerName on @supHistory[0].From.ToShortDateString() and is being supervised by @managerName</div>
+                                                    }
+                                                }
+                                                }
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>                                              }
+                </div>
+            </div>
+        </div>
+        <div id="PromoteDiv">
+            <div id="Promospinner" style="margin-top:15%; text-align:center;display:none">
+                <img src="~/Images/spinners.gif" />
+            </div>
+        </div>
+        @if (student.Status != partnerId)
+        {
+            if (student.Status == managerId)
+            {
+                var studentsId = WhoIsWhereLists.HRSupervisor.Where(x => x.ManagerId == Convert.ToInt32(student.Id) && x.To.Year == 1905).Select(x => x.Id);
+                if (studentsId.Count() > 0)
+                {
+                    <div class="card">
+                        <div class="card-content">
+                            <div id="TransferStudent" />
+                            <div class="row">
+                                <div><b>@student.Name</b> currently reviews their applications</div>
+                                <div class="divider orange darken-4" style="margin-bottom:5px" />
+                                @foreach (var id in studentsId)
+                                {
+                                    var stu = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == id).First();
+                                    var stuphotopath = "/Photo/" + stu.Id + " " + stu.Name + ".jpg";
+                                <div class="col m12">
+                                    <div class="chip" style="min-height:70px;min-width:350px">
+                                        <img src="@stuphotopath" alt="Contact Person" style="min-height:70px;min-width:70px">
+                                        <b>@stu.Name</b><br />
+                                        @Lists4CV.Status.Where(x => x.Id.ToString() == stu.Status).First().Name
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            var employeesId = WhoIsWhereLists.HRSupervisor.Where(x => x.PartnerId == Convert.ToInt32(student.Id) && x.To.Year == 1905 && x.ManagerId == 0).Select(x => x.Id);
+            if (employeesId.Count() > 0)
+            {
+                <div id="PartnersEmployees">
+                    <div class="card">
+                        <div class="card-content">
+                            <div id="TransferEmployees" />
+                            <div class="row">
+                                <div>Supervises following Employee(s)</div>
+                                <div class="divider orange darken-4" style="margin-bottom:5px" />
+                                @foreach (var id in employeesId)
+                                {
+                                    var stu = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == id).First();
+                                    var stuphotopath = "/Photo/" + stu.Id + " " + stu.Name + ".jpg";
+                                    <div class="col m12">
+                                        <div class="chip" style="min-height:70px;min-width:350px">
+                                            <img src="@stuphotopath" alt="Contact Person" style="min-height:70px;min-width:70px">
+                                            <b>@stu.Name</b><br />
+                                            @Lists4CV.Status.Where(x => x.Id.ToString() == stu.Status).First().Name
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        @*<div id="PromoteDiv">
+            <div id="Promospinner" style="margin-top:15%; text-align:center;display:none">
+                <img src="~/Images/spinners.gif" />
+            </div>
+        </div>*@
+    </div>
+    <div class="col m6" id="SecondColumn">
+        @if (student.Status != partnerId)
+        {
+            <div class="card">
+                <div class="card-content">
+                    <table class="customtable">
+                        <thead>
+                            <tr>
+                                <th class="white-text">Subject of Application</th>
+                                <th class="white-text">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a name="AllApps2" data-val="First">@applications.FirstApplication.AppSubject</a></td>
+                                <td>@applications.FirstApplication.Date.ToShortDateString()</td>
+                            </tr>
+                            <tr>
+                                @if (applications.Joining != null)
+                                {
+                                    <td><a name="AllApps2" data-val="Joining">@applications.Joining.AppSubject</a></td>
+                                    <td>@applications.Joining.Date.ToShortDateString()</td>
+                                }
+                            </tr>
+                            @foreach (var item in applications.Applications)
+                            {
+                                <tr>
+                                    <td><a name="AllApps2" data-val="@item.Sl">@WhoIsWhereLists.Applications.Where(x => x.Id == item.AppTypeId).Select(x => x.Type).First()</a></td>
+                                    <td>@item.Date.ToShortDateString()</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            var studentsId = WhoIsWhereLists.HRSupervisor.Where(x => x.PartnerId == Convert.ToInt32(student.Id) && x.To.Year == 1905 && x.ManagerId != 0);
+            if (studentsId.Count() > 0)
+            {
+                var supApprentice = studentsId.Where(x => x.StatusId.ToString() == apprenticeId);
+                var supAFR = studentsId.Where(x => x.StatusId.ToString() == appliedId);
+                var supArticled = studentsId.Where(x => x.StatusId.ToString() == articledId);
+
+                <div class="card">
+                    <div class="card-content">
+                        <div id="TransferStudent" />
+                        @if (supArticled.Count() > 0)
+                        {
+                            <div class="row">
+                                <div>Principal of following Articled Student(s)</div>
+                                <div class="divider orange darken-4" style="margin-bottom:5px" />
+                                @foreach (var sup in supArticled)
+                                {
+                                    var stu = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == sup.Id).First();
+                                    var stuphotopath = "/Photo/" + stu.Id + " " + stu.Name + ".jpg";
+                                    <div class="col m12">
+                                        <div class="chip" style="min-height:70px;min-width:350px">
+                                            <img src="@stuphotopath" alt="Contact Person" style="min-height:70px;min-width:70px">
+                                            <b>@stu.Name</b><br />
+                                            @Lists4CV.Status.Where(x => x.Id.ToString() == stu.Status).First().Name
+                                        </div>
+                                    </div>
+                                } 
+                            </div>
+                        }
+
+                        @if (supAFR.Count() > 0)
+                        {
+                            <div class="row">
+                                <div>Applied for Registration</div>
+                                <div class="divider orange darken-4" style="margin-bottom:5px" />
+                                @foreach (var sup in supAFR)
+                                {
+                                    var stu = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == sup.Id).First();
+                                    var stuphotopath = "/Photo/" + stu.Id + " " + stu.Name + ".jpg";
+                                    <div class="col m12">
+                                        <div class="chip" style="min-height:70px;min-width:350px">
+                                            <img src="@stuphotopath" alt="Contact Person" style="min-height:70px;min-width:70px">
+                                            <b>@stu.Name</b><br />
+                                            @Lists4CV.Status.Where(x => x.Id.ToString() == stu.Status).First().Name
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                        @if (supApprentice.Count() > 0)
+                        {
+                            <div class="row">
+                                <div>Supervises following Apprentice</div>
+                                <div class="divider orange darken-4" style="margin-bottom:5px" />
+                                @foreach (var sup in supApprentice)
+                                {
+                                    var stu = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Id == sup.Id).First();
+                                    var stuphotopath = "/Photo/" + stu.Id + " " + stu.Name + ".jpg";
+                                    <div class="col m12">
+                                        <div class="chip" style="min-height:70px;min-width:350px">
+                                            <img src="@stuphotopath" alt="Contact Person" style="min-height:70px;min-width:70px">
+                                            <b>@stu.Name</b><br />
+                                            @Lists4CV.Status.Where(x => x.Id.ToString() == stu.Status).First().Name
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="modal" id="ConfirmTerminateModal">
+    <div class="modal-content">
+        <h4>Confirm Termination</h4>
+        <div class="divider orange darken-4" />
+        <p>Are you sure to Terminate?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn waves-effect modal-action red" id="btnTerminated" value="@student.Id">Yes</button>
+        <button class="btn waves-effect modal-action green" id="btnDoNotTerminate" style="margin-right:10px">No</button>
+    </div>
+</div>
+
+<div class="modal" id="ConfirmExitModal">
+    <div class="modal-content">
+        <h4>Confirm Exit</h4>
+        <div class="divider orange darken-4" />
+        <p>Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn waves-effect modal-action red" id="btnLeft" value="@student.Id">Yes</button>
+        <button class="btn waves-effect modal-action green" id="btnNotExit" style="margin-right:10px">No</button>
+    </div>
+</div>
+
+<div class="modal" id="ConfirmPartnerExitModal">
+    <div class="modal-content">
+        <h4>Confirm Exit</h4>
+        <div class="divider orange darken-4" />
+        <p>Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn waves-effect modal-action red" id="btnPartnerLeft" value="@student.Id">Yes</button>
+        <button class="btn waves-effect modal-action green" id="btnPartnerNotExit" style="margin-right:10px">No</button>
+    </div>
+</div>
+
+<div class="modal" id="ConfirmCCModal">
+    <div class="modal-content">
+        <h4>Confirm Course Completion</h4>
+        <div class="divider orange darken-4" />
+        <p>Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn waves-effect modal-action red" id="btnCC" value="@student.Id">Yes</button>
+        <button class="btn waves-effect modal-action green" id="btnNotCC" style="margin-right:10px">No</button>
+    </div>
+</div>

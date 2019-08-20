@@ -1,0 +1,77 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var info = (EmployeePaging)TempData["PartStaffs"];
+    List<Student4WhoWhere> emp2send = null;
+    switch (info.Who)
+    {
+        case "articled":
+            emp2send = (List<Student4WhoWhere>)TempData["partArticled"];
+            break;
+        case "applied":
+            emp2send = (List<Student4WhoWhere>)TempData["partAFR"];
+            break;
+        default:
+            emp2send = (List<Student4WhoWhere>)TempData["partApprentice"];
+            break;
+    }
+    TempData.Keep();
+
+    if (info.Who != "articled")
+    {
+        foreach (var student in emp2send)
+        {
+            var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+            var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+            var manager = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+            var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+            <div class="row" style="margin-bottom:2px">
+                <div class="col m2">
+                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                </div>
+                <div class="col m10">
+                    <a name="SeeStudentDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                    <div>@status of @manager</div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        foreach (var student in emp2send)
+        {
+            var regDate = WhoIsWhereLists.RegistrationDetail.Where(x => x.Id == student.Id).First().Date;
+            DateDifference dd = new DateDifference(DateTime.Now.Date, regDate);
+            var status = Lists4CV.Status.Where(x => x.Id == Convert.ToInt32(student.Status)).First().Name;
+            var pid = WhoIsWhereLists.HRSupervisor.Where(x => x.Id == student.Id && x.To.Year == 1905).First().PartnerId;
+            var manager = WhoIsWhereLists.Partners.Where(x => x.Id == pid).First().Name;
+            var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+            <div class="row" style="margin-bottom:2px">
+                <div class="col m2">
+                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                </div>
+                <div class="col m10">
+                    <a name="SeeStudentDetail" data-val="@student.Id"><b><u>@student.Name</u></b></a>
+                    <div>@status of @manager</div>
+                    <p>
+                        @dd.Year year(s) @dd.Month month(s) @dd.Day day(s) elapsed
+                    </p>
+                </div>
+            </div>
+        }
+    }
+
+
+    <div id="@info.Who + Btns">
+        <div class="row">
+            <button name="ManFirstPage"
+                    class="btn-floating btn-small orange darken-1 right tooltipped"
+                    data-position="bottom"
+                    data-delay="50"
+                    data-val="@info.Who"
+                    data-info="@info.Under"
+                    data-tooltip="Collapse">
+                <span class="fa fa-long-arrow-up"></span>
+            </button>
+        </div>
+    </div>
+}

@@ -1,0 +1,82 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var stud = (StudentId)TempData["Id"];
+    TempData.Keep("Id");
+    var application = WhoIsWhereLists.GetNewApplicants().Where(x => x.Id == stud.id).First();
+    var photopath = "/Photo/" + application.Id + " " + application.Name + ".jpg";
+
+    <div class="container" style="width:95%">
+        <div class="row">
+            <div class="col m10">
+                <div id="ApplicantsBoardspinner" style="margin-top:15%; text-align:center;display:none">
+                    <img src="~/Images/spinners.gif" />
+                </div>
+                <div id="ApplicantsBoard">
+                    <br />
+                    <b>Date: <u>@application.Date.ToShortDateString()</u></b>
+                    <br />
+                    To
+                    <br />
+                    The Board of Partners
+                    <br />
+                    BB Saha &amp; Haque
+                    <br />
+                    Chartered Accountants
+                    <br />
+                    22, Dilkusha C/A
+                    <br />
+                    Dhaka - 1000.
+                    <br /><br />
+                    <div>Subject: <b><u>@application.AppSubject</u></b></div>
+                    <br />
+                    Sir,
+                    <br />
+                    <div>
+                        @{
+                            var objlines = application.AppBody.Split(new char[] { '\n' });
+                            var objcount = 0;
+                            foreach (var objline in objlines)
+                            {
+                                if (objcount == 0)
+                                {
+                                    <p>@objline</p>
+                                }
+                                else
+                                {
+                                    if (objline != string.Empty)
+                                    {
+                                        <p>@objline</p>
+                                    }
+                                }
+                                objcount++;
+                            }
+                        }
+                    </div>
+                    <br />
+                    Thanking You,
+                    <br />
+                    Sincerely Yours,
+                    <br /><br />
+                    <div><b>@application.Name</b></div>
+
+                    <br /><br />
+                </div>
+            </div>
+            <div class="col m2">
+                <div class="container" style="width:95%;text-align: center">
+                    <br />
+                    <img class="responsive-img circle z-depth-5" src="@photopath" height="120" width="120" />
+                    <button class="btn-floating btn-large waves-effect orange darken-4 tooltipped"
+                            style="margin-top:-6px"
+                            name="SeeStudentCV2" data-val="@application.Id"
+                            data-position="bottom"
+                            data-delay="50"
+                            data-tooltip="Click to view CV">
+                        <span class="fa fa-binoculars"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

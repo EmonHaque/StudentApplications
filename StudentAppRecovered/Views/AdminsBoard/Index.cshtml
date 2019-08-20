@@ -1,0 +1,49 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var partnerId = Lists4CV.Status.Where(x => x.Name == "Partner").Select(x => x.Id).First().ToString();
+    var students = WhoIsWhereLists.Students4WhoIsWhere;
+    var joiningletters = Employee.JoiningLetters();
+
+    var jobStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Job").Select(x => x.Id).First().ToString();
+    var stuStat = Lists4CV.Status.Where(x => x.Name == "Applicant for Articleship").Select(x => x.Id).First().ToString();
+
+    <div class="nav-wrapper">
+        <ul class="side-nav fixed leftside-navigation">
+            <li><a id="ViewPartners">Partners <span class="badge">@WhoIsWhereLists.Partners.Count()</span> </a></li>
+            <li><a id="ViewStudentCV">Existing Staffs <span class="badge">@students.Where(x => x.JoinedOn.Year != 1905 && x.LeftOn.Year == 1905 && x.Status != partnerId).Count()</span> </a></li>
+            <li><a id="ApplicantCV">New Applicant <span class="badge">@students.Where(x => x.Status == jobStat || x.Status == stuStat).Count()</span></a></li>
+            <li><a id="ExStudentCV">Ex Staffs <span class="badge">@students.Where(x=> x.LeftOn.Year != 1905).Count()</span></a></li>
+            <li><a id="Letters">Joining letters<span class="badge">@joiningletters.Count()</span></a></li>
+            <li><a id="refreshAdminsBoard">Reload <span class="badge fa fa-refresh green-text"></span></a></li>
+        </ul>
+    </div>
+
+   
+
+    <div style="padding-left: 310px; margin-right:10px">
+        <div id="Adminspinner" class="preloader-wrapper active"
+             style="display:none;position:absolute;top:45%;left:60%">
+            <div class="spinner-layer spinner-red-only">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div><div class="gap-patch">
+                    <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <div class="adjustheight" id="AdminsBoardContent">
+            <div id="ChartContainer">
+
+            </div>
+        </div>
+    </div>
+}
+
+
+

@@ -1,0 +1,59 @@
+﻿@using StudentAppRecovered.Helper
+
+@{
+    var departments = (IEnumerable<Department>)TempData["Dept"];
+    var status = (IEnumerable<Status>)TempData["Stat"];
+    <div class="container">
+        <div>
+            <strong>Date: </strong>@DateTime.Now.ToShortDateString()
+        </div>
+        <br />
+        <form id="StudentsApplication">
+            To
+            <br />
+            The Board of Partners
+            <br />
+            BB Saha &amp; Haque
+            <br />
+            Chartered Accountants
+            <br />
+            22, Dilkusha C/A
+            <br />
+            Dhaka - 1000.
+            <br />
+            <div class="row" style="margin-left:0;padding-left:0">
+                <div class="valign-wrapper" style="margin-left:0;padding-left:0">
+                    <div class="col s2 left-align" style="margin-left:0;padding-left:0">Subject: </div>
+                    <div class="col s10 input-field">
+                        <span class="fa fa-envira orange-text text-darken-3 prefix" />
+                        <input id="AppSubject" name="txtAppSubject" type="text">
+                        <label for="txtAppSubject">Write Subject*</label>
+                    </div>
+                </div>
+            </div>
+
+            Sir,
+            <div class="input-field">
+                <span class="fa fa-bars orange-text text-darken-3 prefix" />
+                <textarea id="txtJobApplicationBody" name="JobApplicationBody" class="materialize-textarea" />
+                <label for="JobApplicationBody">Write Body of Your Application</label>
+            </div>
+            Thanking You,
+            <br />
+            Sincerely Yours,
+            <br /><br />
+            <div>@TempData["Name"].ToString()</div>
+
+        </form>
+        <br /><br />
+        <div class="row">
+            <button id="SubmitJobApp"
+                    class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                    data-position="left"
+                    data-delay="50"
+                    data-tooltip="Next">
+                <span class="fa fa-arrow-circle-right"></span>
+            </button>
+        </div>
+    </div>
+}

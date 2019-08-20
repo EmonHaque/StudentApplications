@@ -1,0 +1,420 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var partnerId = Lists4CV.Status.Where(x => x.Name == "Partner").First().Id.ToString();
+    var students = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.JoinedOn.Year != 1905 && x.LeftOn.Year != 1905 && x.Status != partnerId);
+    var partners = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.JoinedOn.Year != 1905 && x.LeftOn.Year != 1905 && x.Status == partnerId);
+    var allPartners = WhoIsWhereLists.Students4WhoIsWhere.Where(x => x.Status == partnerId);
+
+    //List<HRSupervisory> sup = new List<HRSupervisory>();
+    //foreach (var item in students)
+    //{
+    //    sup.Add(WhoIsWhereLists.HRSupervisor.Where(x => x.Id == item.Id).Last());
+    //}
+
+    var ccId = Lists4CV.Status.Where(x => x.Name == "Course Completed").First().Id;
+    var articledId = Lists4CV.Status.Where(x => x.Name == "Articled").First().Id;
+    var apprenticeId = Lists4CV.Status.Where(x => x.Name == "Apprentice").First().Id;
+    var appliedId = Lists4CV.Status.Where(x => x.Name == "Applied for Registration").First().Id;
+
+    var courseCompleted = students.Where(x => x.LastStatus == ccId);
+    var apperntice = students.Where(x => x.LastStatus == apprenticeId);
+    var articled = students.Where(x => x.LastStatus == articledId);
+    var applied = students.Where(x => x.LastStatus == appliedId);
+    var employees = students.Where(x => x.LastStatus != appliedId &&
+                                        x.LastStatus != apprenticeId &&
+                                        x.LastStatus != articledId &&
+                                        x.LastStatus != ccId);
+
+    //var apperntice = apperntice1.Join(students, hrsup => hrsup.Id, stud => stud.Id, (hrsup, stud) => stud);
+    //var articled = articled1.Join(students, hrsup => hrsup.Id, stud => stud.Id, (hrsup, stud) => stud);
+    //var courseCompleted = courseCompleted1.Join(students, hrsup => hrsup.Id, stud => stud.Id, (hrsup, stud) => stud);
+    //var applied = applied1.Join(students, hrsup => hrsup.Id, stud => stud.Id, (hrsup, stud) => stud);
+    //var employees = employees1.Join(students, hrsup => hrsup.Id, stud => stud.Id, (hrsup, stud) => stud);
+
+    TempData["partCC"] = courseCompleted.ToList();
+    TempData["partApprentice"] = apperntice.ToList();
+    TempData["partArticled"] = articled.ToList();
+    TempData["partAFR"] = applied.ToList();
+    TempData["partEmployee"] = employees.ToList();
+    TempData["partPartner"] = partners.ToList();
+    TempData["allPartners"] = allPartners.ToList();
+    TempData["huSup"] = students.ToList();
+
+    int ccCount, apprenticeCount, appliedCount, articledCount, employeeCount, partnerCount;
+    ccCount = courseCompleted.Count(); apprenticeCount = apperntice.Count(); articledCount = articled.Count();
+    appliedCount = applied.Count(); employeeCount = employees.Count(); partnerCount = partners.Count();
+
+    if (ccCount > 5) { courseCompleted = courseCompleted.Take(5); }
+    if (apprenticeCount > 5) { apperntice = apperntice.Take(5); }
+    if (articledCount > 5) { articled = articled.Take(5); }
+    if (appliedCount > 5) { applied = applied.Take(5); }
+    if (employeeCount > 5) { employees = employees.Take(5); }
+    if (partnerCount > 5) { partners = partners.Take(5); }
+}
+
+<div class="row">
+    <div class="col m6">
+        @if (partners.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Partner</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@partnerCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="partnerDiv">
+                            @foreach (var student in partners)
+                            {
+                                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="ViewStaffCV" value="@student.Id"><b><u>@name</u></b></a>
+                                    <div>from @student.JoinedOn.ToShortDateString() to @student.LeftOn.ToShortDateString()</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (partnerCount > 5)
+                        {
+                            <div id="partnerBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="partner"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (partnerCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="partner"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (employees.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Employee</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@employeeCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="employeeDiv">
+                            @foreach (var student in employees)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                                var lastStat = student.LastStatus; //sup.Where(x => x.Id == student.Id).First();
+                                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                                var leftAs = Lists4CV.Status.Where(x => x.Id == lastStat).First().Name;
+                                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                                    <div>@status as @leftAs</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (employeeCount > 5)
+                        {
+                            <div id="employeeBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="employee"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (employeeCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="employee"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (courseCompleted.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Course Complete</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@ccCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="ccDiv">
+                            @foreach (var student in courseCompleted)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                                var lastStat = student.LastStatus; //sup.Where(x => x.Id == student.Id).First();
+                                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                                var name = student.Name;
+                                var photopath = "/Photo/" + student.Id + " " + name + ".jpg";
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                                    <div>@status</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (ccCount > 5)
+                        {
+                            <div id="ccBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="cc"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (ccCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="cc"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (apperntice.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Apprentice</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@apprenticeCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="apprenticeDiv">
+                            @foreach (var student in apperntice)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                                var lastStat = student.LastStatus; //sup.Where(x => x.Id == student.Id).First();
+                                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                                var name = student.Name;
+                                var photopath = "/Photo/" + student.Id + " " + name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                                    <div>@status</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (apprenticeCount > 5)
+                        {
+                            <div id="apprenticeBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="apprentice"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (apprenticeCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="apprentice"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col m6">
+        @if (articled.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Articled</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@articledCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="articledDiv">
+                            @foreach (var student in articled)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                                var lastStat = student.LastStatus; //sup.Where(x => x.Id == student.Id).First();
+                                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                                var name = student.Name; var photopath = "/Photo/" + student.Id + " " + name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                                    <div>@status</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (articledCount > 5)
+                        {
+                            <div id="articledBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="articled"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (articledCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="articled"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
+        @if (applied.Count() > 0)
+        {
+            <div class="row">
+                <div class="card">
+                    <div class="card-content">
+                        <div><b>Applied for Registration</b><span class="new badge orange darken-4" data-badge-caption="in total" style="margin-right:5px">@appliedCount</span></div>
+                        <div class="divider orange darken-4" style="margin-bottom:5px" />
+                        <div id="appliedDiv">
+                            @foreach (var student in applied)
+                            {
+                                var status = Lists4CV.Status.Where(x => x.Id.ToString() == student.Status).First().Name;
+                                var lastStat = student.LastStatus; //sup.Where(x => x.Id == student.Id).First();
+                                //var fromPartner = allPartners.Where(x => x.Id == lastStat.PartnerId).First().Name;
+                                var name = student.Name;
+                                var photopath = "/Photo/" + student.Id + " " + name + ".jpg"; 
+                                <div class="row" style="margin-bottom:2px">
+                                <div class="col m2">
+                                    <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                                </div>
+                                <div class="col m10">
+                                    <a name="SeeExStudentDetail3" data-val="@student.Id"><b><u>@name</u></b></a>
+                                    <div>@status</div>
+                                </div>
+                            </div>
+                            }
+                        </div>
+                        @if (appliedCount > 5)
+                        {
+                            <div id="appliedBtns">
+                                <div class="row">
+                                    <button name="LoadAll"
+                                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                                            data-position="bottom"
+                                            data-delay="50"
+                                            data-val="applied"
+                                            data-info="ex"
+                                            data-tooltip="All">
+                                        <span class="fa fa-long-arrow-down"></span>
+                                    </button>
+                                    @if (appliedCount >= 10)
+                                    {
+                                        <button name="LoadNext5"
+                                                class="btn-floating btn-small orange darken-1 right tooltipped"
+                                                data-position="left"
+                                                style="margin-right:5px"
+                                                data-delay="50"
+                                                data-val="applied"
+                                                data-info="ex"
+                                                data-tooltip="Next 5">
+                                            <span class="fa fa-arrow-circle-right"></span>
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
+</div>

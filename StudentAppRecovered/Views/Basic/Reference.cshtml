@@ -1,0 +1,76 @@
+﻿<div class="container" style="margin-top:40px">
+    <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+        <div class="card-title orange darken-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>Reference</b></div>
+        </div>
+        <div class="card-content">
+            <div class="container">
+                <div id="ReferenceForm">
+                    <form id="Reference1">
+                        <div class="card-panel" title="Reference">
+                            <div class="input-field">
+                                <span class="fa fa-user orange-text text-darken-3 prefix" />
+                                <input title="ReferenceName" name="txtReferenceName" type="text" maxlength="50">
+                                <label for="txtReferenceName">Name*</label>
+                            </div>
+                            <div class="input-field">
+                                <span class="fa fa-shield orange-text text-darken-3 prefix" />
+                                <input title="ReferenceDesignation" name="txtRefDesignation" type="text" maxlength="30">
+                                <label for="txtRefDesignation">Designation*</label>
+                            </div>
+                            <div class="input-field">
+                                <span class="fa fa-bank orange-text text-darken-3 prefix" />
+                                <textarea title="OrganisationAddress" name="txtOrganisation" class="materialize-textarea" maxlength="150"></textarea>
+                                <label for="txtOrganisation">Organisation name and Address*</label>
+                            </div>
+                            <div class="row">
+                                <div class="input-field col s5">
+                                    <span class="fa fa-phone orange-text text-darken-3 prefix" />
+                                    <input title="ReferenceContactNo" name="txtRefContactNo" type="text" maxlength="11">
+                                    <label for="txtRefContactNo">Contact No.*</label>
+                                </div>
+                                <div class="input-field col s7">
+                                    <span class="fa fa-user-plus orange-text text-darken-3 prefix" />
+                                    <input title="ReferenceRelation" name="txtRefRelation" type="text" maxlength="30">
+                                    <label for="txtRefRelation">Relation*</label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="row">
+                    <div class="col m6">
+                        <button id="btnAddMoreReference"
+                                class="btn-floating btn-large orange darken-3 waves-effect left tooltipped"
+                                style="margin-right:5px"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Add one more reference">
+                            <span class="fa fa-plus-circle"></span>
+                        </button>
+                    </div>
+                    <div class="col m6">
+                        <button id="btnRemoveReference"
+                                class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                                data-position="left"
+                                data-delay="50"
+                                data-tooltip="Remove last reference">
+                            <span class="fa fa-minus-circle"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <button id="btnNexttoReference"
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Next">
+                    <span class="fa fa-arrow-circle-right"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

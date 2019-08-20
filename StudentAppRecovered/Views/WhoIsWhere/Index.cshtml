@@ -1,0 +1,58 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    var students = WhoIsWhereLists.Students4WhoIsWhere;
+    var clients = WhoIsWhereLists.Clients;
+    var services = WhoIsWhereLists.Services;
+
+    <div class="container" style="width:90%">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Location</th>
+                    <th>Service</th>
+                </tr>
+            </thead>
+            @foreach (var student in students)
+            {
+                var photopath = "/Photo/" + student.Id + " " + student.Name + ".jpg";
+                <tr>
+                    <td>
+                        <div class="row valign-wrapper">
+                            <div class="col s2">
+                                <img src="@photopath" height="60" width="60" />
+                            </div>
+                            <div class="col s10 left-align">
+                                @student.Name
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @*take this ddl out of student loop*@
+                        <select class="error browser-default" id="Clients" name="ddlReligion" title="dropdownlist">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var client in clients)
+                            {
+                                <option value="@client.Id">@client.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        @*take this ddl out of student loop*@
+                        <select class="error browser-default" id="Services" name="ddlReligion" title="dropdownlist">
+                            <option value="" disabled selected>Choose</option>
+                            @foreach (var service in services)
+                            {
+                                <option value="@service.Id">@service.Name</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}

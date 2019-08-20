@@ -1,0 +1,35 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="card">
+        <div class="container">
+            <div class="row">
+
+                <div class="col s3">
+                    <img id="uImage" src="" height="150" width="150" />
+                </div>
+                <div class="col s9">
+                    <label for="ddlUser4Update">Select user*</label>
+                    <select class="error browser-default" id="User4Update" name="ddlUser4Update" title="dropdownlist">
+                        <option value="" disabled selected>Choose</option>
+                        @foreach (var item in (IEnumerable<Student4WhoWhere>)TempData["Used"])
+                        {
+                            <option value="@item.Id">
+                                @item.Name
+                            </option>
+                        }
+                    </select>
+
+                    <div  id="UserInfo">
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+

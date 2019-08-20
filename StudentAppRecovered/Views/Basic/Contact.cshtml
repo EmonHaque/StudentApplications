@@ -1,0 +1,58 @@
+﻿<div class="container" style="margin-top:40px">
+    <div class="card wow bounceInRight z-depth-3" style="border:1px solid #e65100">
+        <div class="card-title orange darken-3">
+            <div class="header2 white-text" style="margin:0 10px"><b>Contact Details</b></div>
+        </div>
+        <div class="card-content">
+            <form id="ContactForm">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-phone orange-text text-darken-3 prefix" />
+                        <input id="ContactNo" name="txtContactNo" type="text">
+                        <label for="txtContactNo">Contact No.*</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <span class="fa fa-envelope orange-text text-darken-3 prefix" />
+                        <input id="Email" name="txtEmail" type="text">
+                        <label for="txtEmail">Email</label>
+                    </div>
+                </div>
+                <div class="input-field col s12">
+                    <span class="fa fa-bank orange-text text-darken-3 prefix" />
+                    <textarea id="PresentAddress" name="txtPresentAddress" class="materialize-textarea"></textarea>
+                    <label for="txtPresentAddress">Present address *</label>
+                </div>
+
+                <div class="input-field col s12">
+                    <span class="fa fa-bank orange-text text-darken-3 prefix" />
+                    <textarea id="PermanentAddress" name="txtPermanentAddress" class="materialize-textarea"></textarea>
+                    <label for="txtPermanentAddress">Permanent address *</label>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <span class="fa fa-microphone orange-text text-darken-3 prefix" />
+                        <input id="EmergencyContactNo" name="txtEmergencyContactNo" type="text">
+                        <label for="txtEmergencyContactNo">Emergency Contact No.*</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <span class="fa fa-user-plus orange-text text-darken-3 prefix" />
+                        <input id="RelationEmergencyContact" name="txtRelationEmergencyContact" type="text">
+                        <label for="txtRelationEmergencyContact">Relation*</label>
+                    </div>
+                </div>
+
+            </form>
+
+            <div class="row">
+                <button id="btnNexttoContact" 
+                        class="btn-floating btn-large orange darken-3 waves-effect right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Next">
+                    <span class="fa fa-arrow-circle-right"></span>
+                </button>            
+            </div>
+        </div>
+    </div>
+</div>

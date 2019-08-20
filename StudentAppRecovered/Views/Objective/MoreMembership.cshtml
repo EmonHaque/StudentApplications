@@ -1,0 +1,30 @@
+﻿@using StudentAppRecovered.Helper
+@{ 
+    var no = (StudentId)TempData["Id"];
+    var institutes = Lists4CV.MemberOf;
+    var formid = "Membership" + no.id;
+    var ddlid = "Memddl" + no.id;
+    var ddlname = "ddlMebersOrg1" + no.id;
+}
+
+<form id="@formid">
+    <div class="card" title="Membership">
+        <div class="card-content">
+            <div class="input-field">
+                <span class="fa fa-info-circle orange-text text-darken-3 prefix" />
+                <input title="MembershipId" name="txtMembershipId" type="text" maxlength="50">
+                <label for="txtMembershipId">Membership Id*</label>
+            </div>
+            <div class="input-field">
+                <span class="fa fa-institution orange-text text-darken-3 prefix" />
+                <select id="@ddlid" title="MebersOrg" name="@ddlname">
+                    <option value="" disabled selected>Choose</option>
+                    @foreach (var item in Lists4CV.MemberOf)
+                    {
+                        <option value="@item.Id">@item.Organisation</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+</form>

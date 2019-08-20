@@ -1,0 +1,106 @@
+﻿@using StudentAppRecovered.Helper
+@{
+    var info = (ApplicationPaging)ViewData["AppsInfo"];
+    var joiningletters = (List<JoiningLetter>)ViewData["Apps"];
+    var students = (List<Student4WhoWhere>)TempData["AllStudents"];
+    TempData.Keep();
+
+    if (joiningletters.Count() > 0)
+    {
+        foreach (var student in joiningletters)
+        {
+            var studName = students.Where(x => x.Id == student.Id).Select(x => x.Name).First();
+            var photopath = "/Photo/" + student.Id + " " + studName + ".jpg";
+            <div class="col m6">
+                <div class="row" style="margin-bottom:2px">
+                    <div class="col m2">
+                        <img src="@photopath" class="responsive-img circle" style="max-height:70px;max-width:70px">
+                    </div>
+                    <div class="col m10">
+                        <a name="SeeJoiningLetter" data-val="@student.Id"><b><u>@studName</u></b></a>
+                        <div>Joined on @student.Date.ToLongDateString()</div>
+                        <div>@student.AppSubject</div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            @if ((info.PageNo * info.PageSize) < info.TotalApps)
+                {
+                    if (info.PageNo == 1)
+                    {
+                    <button name="nextJoining"
+                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                            data-position="left"
+                            data-delay="50"
+                            data-tooltip="Next">
+                        <span class="fa fa-long-arrow-right"></span>
+                    </button>
+                }
+                else
+                {
+                    <button name="nextJoining"
+                            class="btn-floating btn-small orange darken-1 right tooltipped"
+                            data-position="left"
+                            data-delay="50"
+                            data-tooltip="Next">
+                        <span class="fa fa-long-arrow-right"></span>
+                    </button>
+                        <button name="backJoining" data-val="@info.PageNo"
+                                class="btn-floating btn-small orange darken-1 left tooltipped"
+                                data-position="right"
+                                data-delay="50"
+                                data-tooltip="Previous">
+                            <span class="fa fa-long-arrow-left"></span>
+                        </button>
+                }
+            }
+            else
+            {
+                if (info.PageNo != 1)
+                {
+                    <button name="backJoining" data-val="@info.PageNo"
+                            class="btn-floating btn-small orange darken-1 left tooltipped"
+                            data-position="right"
+                            data-delay="50"
+                            data-tooltip="Previous">
+                        <span class="fa fa-long-arrow-left"></span>
+                    </button>
+                }
+            }
+        </div>
+            <div class="row">
+                @{
+                    int from, to, outof; from = to = 0;
+                    outof = info.TotalApps;
+                    if (info.PageNo == 1)
+                    {
+                        from = 1;
+                        if (info.TotalApps < info.PageSize)
+                        {
+                            to = info.TotalApps;
+                        }
+                        else
+                        {
+                            to = info.PageSize;
+                        }
+                    }
+                    else
+                    {
+                        from = (info.PageNo - 1) * info.PageSize + 1;
+                        to = from - 1 + info.PageSize;
+                        if (to > info.TotalApps)
+                        {
+                            to = info.TotalApps;
+                        }
+                    }
+                }
+                <p>@from to @to out of @outof</p>
+            </div>
+                    }
+}
+
+
+
+
